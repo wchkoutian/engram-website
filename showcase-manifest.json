@@ -1,0 +1,27 @@
+{
+  "updated": "2026-10-31",
+  "selection": "Curated visual examples, not a random sample or aggregate quality ranking.",
+  "showcase": {
+    "split": "RealEstate10K Local-10 development examples",
+    "scenes": [
+      "bc1571b6ae57de68",
+      "8ab1900fbe301245"
+    ],
+    "checkpoint_sha256": "0df7462103bba3827f82a0aa1a4d2550a41b641b26c4673f9bcd98f283f749d5",
+    "generation_seed": 20917,
+    "frames": 153,
+    "fps": 24
+  },
+  "memory": {
+    "representation": "Sampled latent slot positions colored by provenance; not RGB reconstruction.",
+    "snapshots": "Only completed writes are shown, at frames 32,64,96,128,152. Observed anchors stay fixed.",
+    "display_encoding": "uint16 coordinates quantized to the scene extent; source files preserved."
+  },
+  "comparison": {
+    "scene": "5b8b4c355672dbb3",
+    "task": "closed_loop",
+    "selection": "Selected from the original fixed five-scene comparison sample",
+    "original_manifest": "manifest.json"
+  },
+  "evaluation": "All reported aggregate metrics are unchanged from the October 30 snapshot. Curated demonstration scenes do not redefine evaluation sets."
+}

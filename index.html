@@ -1,356 +1,77 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Engram · Anchor-Protected Latent Memory for Video World Models</title>
-<meta name="description" content="Engram: anchor-protected latent memory for video world models. Project page with WorldScore results on a stratified sample and RealEstate10K novel view synthesis and closed-loop revisit comparisons.">
-<link rel="stylesheet" href="assets/site.css"></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Engram · Anchor-Protected Latent Memory for Video World Models</title>
+  <meta name="description" content="Explore a scene. Come back to what you remember. Selected Engram video results and interactive spatial memory.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/showcase.js" defer></script>
+</head>
 <body>
-<header class="hero wrap narrow" id="top">
-  <h1><span class="wordmark">Engram:</span> Anchor-Protected Latent Memory <span class="title-line">for Video World Models</span></h1>
-  <p class="authors">Author list and affiliations to be finalized</p>
-  <p class="publication-note">Research project · 2026</p>
-  <div class="chips">
-    <span class="chip soon" aria-disabled="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2h7l4 4v12H5zM12 2v5h4M8 11h5M8 14h5"/></svg>Paper <small>soon</small></span>
-    <span class="chip soon" aria-disabled="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 5-4 5 4 5m8-10 4 5-4 5m-3-13-2 16"/></svg>Code <small>soon</small></span>
-    <a class="chip" href="#re10k"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="m8 7 5 3-5 3z"/></svg>View results</a>
-    <a class="chip" href="#bibtex"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 3H5v5l-2 2 2 2v5h2M13 3h2v5l2 2-2 2v5h-2"/></svg>BibTeX</a>
-  </div>
-  <nav class="section-nav" aria-label="Page sections">
-    <a href="#abstract">Abstract</a><a href="#method">Method</a><a href="#re10k">Comparisons</a><a href="#worldscore">Quantitative results</a>
+<header class="hero wrap" id="top">
+  <h1><span class="wordmark">Engram</span><span class="paper-title">Anchor-Protected Latent Memory<br>for Video World Models</span></h1>
+  <p class="tagline">Explore a scene. Come back to what you remember.</p>
+  <nav class="chips" aria-label="Project links">
+    <a class="chip" href="#demo"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6z"/></svg>Watch demo</a>
+    <a class="chip secondary" href="#comparisons">View comparisons <span aria-hidden="true">↗</span></a>
   </nav>
 </header>
-
 <main>
-<section class="wrap teaser" aria-labelledby="teaser-heading">
-  <h2 id="teaser-heading">Explore a scene. Return to what was observed.</h2>
-  <p class="section-intro">A single input image, a camera trajectory, and a memory of the observed scene.</p>
-  <div class="teaser-grid">
-    <figure><figcaption>Input image</figcaption><img id="teaser-input" alt="Observed input frame"><p class="frame-note">Real observation · frame 0</p></figure>
-    <figure class="teaser-rollout"><figcaption class="ours-label">Engram · closed-loop generation</figcaption><video id="teaser-video" autoplay muted loop playsinline controls preload="metadata" aria-label="Engram closed-loop generation"></video><p class="frame-note">Explore and revisit · 153 frames</p></figure>
-    <figure><figcaption>Return to the initial view</figcaption><img id="teaser-return" alt="Engram generated final frame at the initial camera pose"><p class="frame-note">Generated view · frame 152</p></figure>
-  </div>
-  <div class="teaser-scenes" id="teaser-scenes" role="group" aria-label="Choose a teaser scene"></div>
-  <p class="teaser-caption"><strong>Observed evidence stays in memory.</strong> Engram protects real latent anchors, reads from two spatial layers, and filters generated writes against the observed surface. Choose one of the five sampled scenes above.</p>
-</section>
-
-<section class="wrap" id="abstract">
-  <div class="measure">
-    <h2>Abstract</h2>
-    <p class="abs">Video world models drift when a camera leaves a region and returns: the model has to regenerate content it has already observed, and nothing in a plain latent history tells it which latents came from real pixels. <b>Engram</b> keeps a single latent memory in which every slot carries a provenance tag, protects the slots lifted from observed frames, and reads it through two spatial layers that reserve at least one real candidate in the top-k. Newly generated content is written back only where it does not occlude the initial-view surface. The result is a model that can be explored and revisited without the observed scene dissolving into prior-driven detail.</p>
-  </div>
-</section>
-
-<section class="wrap" id="method">
-  <h2>Method</h2>
-  <p class="section-intro">Three mechanisms, one persistent latent memory.</p>
-  <figure>
-    <div class="figframe"><img src="assets/engram_fig1.png" alt="Engram overview: a room is explored and revisited; real latent anchors are protected, readout uses two spatial layers, and generated writes are filtered against the observed surface." loading="lazy"></div>
-    <figcaption><b>Figure 1.</b> A real room, explored and revisited (top), and the memory loop that protects what was observed (bottom). Frames are from the RealEstate10K comparison; crops show the same wall objects returning with their identity intact while the explored view adds content the input never contained. Real anchors stay unchanged in one store; readout projects candidates from two layers and reserves a real candidate when one is available; generated writes are lifted to 3D and rejected if they fall in front of the observed surface.</figcaption>
-  </figure>
-  <div class="method-steps">
-    <div class="method-step"><div class="num">01 · WRITE</div><h3>Protected latent anchors</h3><p>The initial image is lifted into 3D and written to memory as <em>real</em>. Real slots are immutable under the default write policy, and a real candidate is reserved in every top-k read, so later generated content cannot crowd observed evidence out of the read set.</p></div>
-    <div class="method-step"><div class="num">02 · READ</div><h3>Layered readout</h3><p>Camera rays and the trajectory are projected into the store at two spatial scales. Read candidates come from both layers, are confidence-weighted, and are fused into the video DiT as extra conditioning tokens alongside text and camera rays.</p></div>
-    <div class="method-step"><div class="num">03 · UPDATE</div><h3>Guarded write-back</h3><p>Generated latents are depth-estimated and lifted back into the store. A write is rejected if it sits in front of the observed surface. The next chunk's prefix is seeded by latent inversion of the last generated frame.</p></div>
-  </div>
-</section>
-
-<section class="wrap" id="re10k">
-  <h2>Video Comparisons</h2>
-  <p class="section-intro">Novel view synthesis and closed-loop revisit on five shared RealEstate10K scenes.</p>
-  <div class="viewer">
-    <div class="scenes" id="scene-nav" role="group" aria-label="Choose a comparison scene"></div>
-    <div class="stage">
-      <div class="stagehead">
-        <div class="shleft"><h3 id="scene-title">Scene</h3><span class="meta" id="scene-meta"></span></div>
-        <div class="tabs" role="tablist" aria-label="Comparison task">
-          <button id="tab-nvs" role="tab" aria-controls="players" aria-selected="true">Novel view synthesis</button>
-          <button id="tab-closed_loop" role="tab" aria-controls="players" aria-selected="false">Closed-loop revisit</button>
-        </div>
-      </div>
-      <div class="players" id="players" role="tabpanel" aria-labelledby="tab-nvs"></div>
-      <div class="controls">
-        <button class="primary" id="play">▶ Play together</button><button id="reset">First frame</button><button id="prev">← Frame</button><button id="next">Frame →</button><button id="last">Last frame</button>
-        <label>Speed <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
-        <span class="status" id="status" role="status"></span>
-      </div>
-      <input id="seek" type="range" min="0" max="80" value="0" step="1" aria-label="Comparison frame position">
-      <div class="ticks"><span id="tick-start">frame 0</span><span id="frame-label"></span><span id="tick-end"></span></div>
-      <p class="err" id="error" role="alert"></p>
-      <div class="stills" id="stills"></div>
+  <section class="wrap showcase" id="demo" aria-label="Selected Engram demonstrations">
+    <div class="scene-picker" role="group" aria-label="Choose a scene">
+      <button type="button" data-scene="0" aria-pressed="true"><img src="media/showcase/living-room-input.jpg" alt="">Living room</button>
+      <button type="button" data-scene="1" aria-pressed="false"><img src="media/showcase/kitchen-input.jpg" alt="">Kitchen</button>
     </div>
-  </div>
-  <p class="note">The five scenes were sampled with a fixed seed from 90 complete shared scenes. They are shown for qualitative inspection; they do not establish a full-set ranking. <a href="#evaluation-notes">Evaluation details ↓</a></p>
-  <div class="qualgrid">
-    <figure><h3>Novel View Synthesis</h3>
-      <div class="figframe"><img src="assets/engram_fig2.png" alt="Novel view synthesis: input, Engram, Spatia and ViewCrafter across three scenes." loading="lazy"></div>
-      <figcaption><b>Figure 2.</b> Novel view synthesis. Frames 1–80 of an 81-frame generation are scored against the held-out view; the frame shown is 80. Scenes are ranks 2–4 by Engram closed-loop PSNR — a rule fixed before inspecting any output, so neither the best nor the worst case is shown.</figcaption>
-    </figure>
-    <figure><h3>Closed-Loop Revisit</h3>
-      <div class="figframe"><img src="assets/engram_fig3.png" alt="Closed-loop revisit: input, Engram, Spatia and ViewCrafter across three scenes." loading="lazy"></div>
-      <figcaption><b>Figure 3.</b> Closed-loop revisit. The camera returns to its initial pose and frame 152 is scored against the input image. ViewCrafter degrades into colour-block and grid artefacts at this horizon; on these scenes Engram keeps the observed layout and the identity of specific objects.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<section class="wrap" id="worldscore">
-  <h2>Quantitative Results</h2>
-  <div class="results-block">
-    <h3>WorldScore</h3>
-    <p class="section-intro">Reported scores with their evaluation sets. Higher is better.</p>
-    <div class="table-wrap" tabindex="0" role="region" aria-label="WorldScore summary table"><table id="ws-summary"></table></div>
-    <p class="note" id="ws-note"></p>
-    <details><summary>All metrics and methods</summary>
-      <div class="legend"><span><i style="background:var(--teal)"></i>Engram · <span id="ws-n-engram"></span></span><span><i style="background:var(--orange)"></i>Spatia (our reproduction) · <span id="ws-n-spatia"></span></span></div>
-      <div id="ws-ledger"></div>
-      <div class="table-wrap" tabindex="0" role="region" aria-label="All WorldScore metrics"><table id="ws-table"></table></div>
+    <div class="demo-grid">
+      <figure class="video-panel">
+        <figcaption><span>Explore &amp; revisit</span><span class="brand-label">Engram</span></figcaption>
+        <div class="video-frame"><video id="demo-video" muted playsinline preload="metadata" poster="media/showcase/living-room-input.jpg" aria-label="Engram generated camera journey through the living room"></video></div>
+      </figure>
+      <figure class="memory-panel">
+        <figcaption><span>Persistent 3D memory</span><span class="quiet">Drag to rotate</span></figcaption>
+        <div class="memory-frame"><canvas id="memory" tabindex="0" aria-label="Interactive memory point cloud. Drag or use arrow keys to rotate; press Home to reset."></canvas><p id="memory-status" class="memory-status" role="status">Loading memory…</p></div>
+      </figure>
+    </div>
+    <div class="demo-footer">
+      <div class="playback"><button type="button" class="play-button" id="demo-play" aria-label="Play demo"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6z"/></svg></button><input type="range" id="demo-seek" min="0" max="152" step="1" value="0" aria-label="Demo playback position"><span class="phase" id="demo-phase">Explore</span></div>
+      <div class="legend" aria-label="Memory point colors"><span><i class="real"></i>Observed anchors</span><span><i class="generated"></i>Generated memory</span></div>
+    </div>
+    <p class="media-error" id="demo-error" role="alert" hidden></p>
+    <div class="return-pair">
+      <figure><img id="observed-view" src="media/showcase/living-room-input.jpg" width="960" height="528" alt="Original observed living room"><figcaption>Input view</figcaption></figure>
+      <span class="return-arrow" aria-hidden="true">↔</span>
+      <figure><img id="returned-view" src="media/showcase/living-room-return.jpg" width="960" height="528" alt="Engram return to the original living room view"><figcaption>Revisited view</figcaption></figure>
+    </div>
+    <p class="selection-note">Selected examples · RealEstate10K</p>
+  </section>
+  <section class="wrap comparisons" id="comparisons" aria-labelledby="comparison-title">
+    <h2 id="comparison-title">A closer look at the return.</h2>
+    <p class="section-intro">The same scene, explored and revisited.</p>
+    <div class="comparison-grid" id="comparison-players"></div>
+    <div class="playback comparison-playback"><button type="button" class="play-button" id="comparison-play" aria-label="Play comparison"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6z"/></svg></button><input type="range" id="comparison-seek" min="0" max="152" step="1" value="0" aria-label="Comparison playback position"><span class="phase" id="comparison-phase">Explore</span></div>
+    <p class="media-error" id="comparison-error" role="alert" hidden></p>
+    <p class="selection-note">Selected closed-loop example · 153 frames</p>
+  </section>
+  <section class="wrap paper-details" aria-label="Additional research details">
+    <details id="research-details">
+      <summary><span>Method &amp; quantitative results</span><span class="detail-plus" aria-hidden="true">+</span></summary>
+      <div class="details-content">
+        <h2>Anchor-protected memory</h2>
+        <p class="detail-intro">Keep observed anchors. Read two depth-ranked candidates per target cell, reserving a real candidate when available. Guard generated writes against the observed surface.</p>
+        <img class="method-figure" src="assets/engram_fig1.png" width="1400" height="970" loading="lazy" alt="Engram overview: immutable real anchors, depth-ranked layered readout, and guarded write-back.">
+        <h3>RealEstate10K</h3>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="RealEstate10K measured results"><table id="re10k-results"></table></div>
+        <p class="table-note">Common-five scores use the original fixed sample, not the curated showcase. NVS: frames 1–80 against the held-out view. Closed loop: frame 152 against the input. The common-five runs are diagnostic; test-100 is a separate split. Shared scene IDs do not imply identical internal camera handling.</p>
+        <h3>WorldScore</h3>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="WorldScore reported results"><table id="worldscore-results"></table></div>
+        <p class="table-note">Different evaluation sets: Engram uses 80 static + 20 dynamic cases; Spatia uses 100 + 100. These reported scores are not a paired comparison.</p>
+      </div>
     </details>
-  </div>
-  <div class="results-block" id="evaluation-notes">
-    <h3>RealEstate10K</h3>
-    <p class="section-intro">Novel view synthesis · 81 frames &nbsp; / &nbsp; Closed-loop revisit · 153 frames</p>
-    <div class="table-wrap" tabindex="0" role="region" aria-label="RealEstate10K measured results"><table id="re10k-summary"></table></div>
-    <p class="note" id="re10k-note"></p>
-    <details><summary>All methods and per-scene scores</summary>
-      <div class="table-wrap" tabindex="0" role="region" aria-label="All RealEstate10K methods"><table id="re10k-agg"></table></div>
-      <div class="table-wrap" tabindex="0" role="region" aria-label="Per-scene RealEstate10K scores"><table id="re10k-all"></table></div>
-    </details>
-  </div>
-</section>
-
-<section class="wrap availability" id="availability">
-  <div class="measure"><details><summary>Availability and evaluation status</summary>
-    <div class="status-grid"><div class="stbox"><h3>Measured</h3><ul id="status-ok"></ul></div><div class="stbox"><h3>Pending</h3><ul id="status-pending"></ul></div></div>
-  </details></div>
-</section>
-<section class="wrap citation" id="bibtex"><h2>BibTeX</h2><p class="section-intro">Provisional citation · author list to be finalized</p><pre id="bib"></pre></section>
+  </section>
 </main>
-<footer><div class="wrap"><p>Engram · Anchor-Protected Latent Memory for Video World Models</p><p>Evaluation snapshot: October 30, 2026 · <a href="manifest.json">Sample manifest</a> · <a href="#top">Back to top ↑</a></p></div></footer>
-<dialog id="zoom" aria-label="Enlarged comparison frame"><button id="zoom-close">Close</button><img id="zoom-img" alt="Enlarged frame"></dialog>
-
-<script>
-const DATA = {"scenes":[{"id":"cdf439b17a6a98d4","input":"media/cdf439b17a6a98d4_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/cdf439b17a6a98d4_nvs_engram.mp4","last_frame":"media/cdf439b17a6a98d4_nvs_engram_last.jpg","metrics":{"psnr":19.032364082336425,"ssim":0.7498906292021275,"lpips":0.34143285560421643},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/cdf439b17a6a98d4_nvs_spatia.mp4","last_frame":"media/cdf439b17a6a98d4_nvs_spatia_last.jpg","metrics":{"psnr":19.567040169239043,"ssim":0.7899113945662976,"lpips":0.3174958860501647},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/cdf439b17a6a98d4_nvs_viewcrafter.mp4","last_frame":"media/cdf439b17a6a98d4_nvs_viewcrafter_last.jpg","metrics":{"psnr":10.651471018791199,"ssim":0.5596061319112777,"lpips":0.7926822546869516},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/cdf439b17a6a98d4_closed_loop_engram.mp4","last_frame":"media/cdf439b17a6a98d4_closed_loop_engram_last.jpg","metrics":{"psnr":23.672653198242188,"ssim":0.8195302486419678,"lpips":0.17262130975723267},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/cdf439b17a6a98d4_closed_loop_spatia.mp4","last_frame":"media/cdf439b17a6a98d4_closed_loop_spatia_last.jpg","metrics":{"psnr":18.064783096313477,"ssim":0.7354676723480225,"lpips":0.2876731753349304},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/cdf439b17a6a98d4_closed_loop_viewcrafter.mp4","last_frame":"media/cdf439b17a6a98d4_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":11.99752426147461,"ssim":0.4523509442806244,"lpips":0.7173474431037903},"fps":24.0,"frames":153,"width":1280,"height":704}}}},{"id":"5b8b4c355672dbb3","input":"media/5b8b4c355672dbb3_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/5b8b4c355672dbb3_nvs_engram.mp4","last_frame":"media/5b8b4c355672dbb3_nvs_engram_last.jpg","metrics":{"psnr":17.132093238830567,"ssim":0.6645224012434483,"lpips":0.24760490362532436},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/5b8b4c355672dbb3_nvs_spatia.mp4","last_frame":"media/5b8b4c355672dbb3_nvs_spatia_last.jpg","metrics":{"psnr":17.18221709728241,"ssim":0.652764318883419,"lpips":0.2405756120570004},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/5b8b4c355672dbb3_nvs_viewcrafter.mp4","last_frame":"media/5b8b4c355672dbb3_nvs_viewcrafter_last.jpg","metrics":{"psnr":8.143161219358444,"ssim":0.404913988057524,"lpips":0.722029871866107},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/5b8b4c355672dbb3_closed_loop_engram.mp4","last_frame":"media/5b8b4c355672dbb3_closed_loop_engram_last.jpg","metrics":{"psnr":18.831356048583984,"ssim":0.7296141386032104,"lpips":0.2115725427865982},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/5b8b4c355672dbb3_closed_loop_spatia.mp4","last_frame":"media/5b8b4c355672dbb3_closed_loop_spatia_last.jpg","metrics":{"psnr":14.52079963684082,"ssim":0.6495606899261475,"lpips":0.38562822341918945},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/5b8b4c355672dbb3_closed_loop_viewcrafter.mp4","last_frame":"media/5b8b4c355672dbb3_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":8.134588241577148,"ssim":0.31564071774482727,"lpips":0.6512725949287415},"fps":24.0,"frames":153,"width":1280,"height":704}}}},{"id":"ce78742674686c71","input":"media/ce78742674686c71_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/ce78742674686c71_nvs_engram.mp4","last_frame":"media/ce78742674686c71_nvs_engram_last.jpg","metrics":{"psnr":17.1082302570343,"ssim":0.47752669006586074,"lpips":0.35168290659785273},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/ce78742674686c71_nvs_spatia.mp4","last_frame":"media/ce78742674686c71_nvs_spatia_last.jpg","metrics":{"psnr":16.771570134162904,"ssim":0.47734697423875333,"lpips":0.3837134034372866},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/ce78742674686c71_nvs_viewcrafter.mp4","last_frame":"media/ce78742674686c71_nvs_viewcrafter_last.jpg","metrics":{"psnr":9.509265381097794,"ssim":0.2662367929704487,"lpips":0.8320716582238674},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/ce78742674686c71_closed_loop_engram.mp4","last_frame":"media/ce78742674686c71_closed_loop_engram_last.jpg","metrics":{"psnr":16.948341369628906,"ssim":0.4939488172531128,"lpips":0.4347684383392334},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/ce78742674686c71_closed_loop_spatia.mp4","last_frame":"media/ce78742674686c71_closed_loop_spatia_last.jpg","metrics":{"psnr":15.045755386352539,"ssim":0.41090211272239685,"lpips":0.44200360774993896},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/ce78742674686c71_closed_loop_viewcrafter.mp4","last_frame":"media/ce78742674686c71_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":6.876156806945801,"ssim":0.12405173480510712,"lpips":0.9160600304603577},"fps":24.0,"frames":153,"width":1280,"height":704}}}},{"id":"7ed7c335dba256b8","input":"media/7ed7c335dba256b8_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/7ed7c335dba256b8_nvs_engram.mp4","last_frame":"media/7ed7c335dba256b8_nvs_engram_last.jpg","metrics":{"psnr":18.52861491441727,"ssim":0.7301924400031566,"lpips":0.369636547844857},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/7ed7c335dba256b8_nvs_spatia.mp4","last_frame":"media/7ed7c335dba256b8_nvs_spatia_last.jpg","metrics":{"psnr":19.582685780525207,"ssim":0.7542791724205017,"lpips":0.2729294938966632},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/7ed7c335dba256b8_nvs_viewcrafter.mp4","last_frame":"media/7ed7c335dba256b8_nvs_viewcrafter_last.jpg","metrics":{"psnr":6.298288589715957,"ssim":0.22008703025057913,"lpips":0.8237092703580856},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/7ed7c335dba256b8_closed_loop_engram.mp4","last_frame":"media/7ed7c335dba256b8_closed_loop_engram_last.jpg","metrics":{"psnr":22.007549285888672,"ssim":0.8232951760292053,"lpips":0.17691275477409363},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/7ed7c335dba256b8_closed_loop_spatia.mp4","last_frame":"media/7ed7c335dba256b8_closed_loop_spatia_last.jpg","metrics":{"psnr":16.19355583190918,"ssim":0.7450903058052063,"lpips":0.3869561553001404},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/7ed7c335dba256b8_closed_loop_viewcrafter.mp4","last_frame":"media/7ed7c335dba256b8_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":10.64366340637207,"ssim":0.40012678503990173,"lpips":0.6769161820411682},"fps":24.0,"frames":153,"width":1280,"height":704}}}},{"id":"96a7bdbfc462408d","input":"media/96a7bdbfc462408d_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/96a7bdbfc462408d_nvs_engram.mp4","last_frame":"media/96a7bdbfc462408d_nvs_engram_last.jpg","metrics":{"psnr":18.988112843036653,"ssim":0.7243035197257995,"lpips":0.2425638717599213},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/96a7bdbfc462408d_nvs_spatia.mp4","last_frame":"media/96a7bdbfc462408d_nvs_spatia_last.jpg","metrics":{"psnr":20.558604073524474,"ssim":0.756799204647541,"lpips":0.20167222702875734},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/96a7bdbfc462408d_nvs_viewcrafter.mp4","last_frame":"media/96a7bdbfc462408d_nvs_viewcrafter_last.jpg","metrics":{"psnr":8.825031119585038,"ssim":0.3120632767677307,"lpips":0.7967016622424126},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/96a7bdbfc462408d_closed_loop_engram.mp4","last_frame":"media/96a7bdbfc462408d_closed_loop_engram_last.jpg","metrics":{"psnr":21.955657958984375,"ssim":0.8066689372062683,"lpips":0.1666511446237564},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/96a7bdbfc462408d_closed_loop_spatia.mp4","last_frame":"media/96a7bdbfc462408d_closed_loop_spatia_last.jpg","metrics":{"psnr":16.345930099487305,"ssim":0.6955522894859314,"lpips":0.34028077125549316},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/96a7bdbfc462408d_closed_loop_viewcrafter.mp4","last_frame":"media/96a7bdbfc462408d_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":8.15760612487793,"ssim":0.25213125348091125,"lpips":0.8689360022544861},"fps":24.0,"frames":153,"width":1280,"height":704}}}}],"ws":{"engram":{"n":"stratified 100 · 80 + 20"},"spatia":{"n":"stratified 200 · 100 + 100"},"tiles":[{"label":"WorldScore Avg.","value":"68.52","who":"Engram · stratified 100"},{"label":"Dynamic","value":"66.39","who":"Engram · 20 dynamic scenes"},{"label":"WorldScore Avg.","value":"64.47","who":"Spatia · stratified 200"},{"label":"Remaining baselines","value":"pending","who":"Voyager · LSM · 4LC · Wan · WonderWorld","pending":true}],"groups":[{"title":"Overall","rows":[{"label":"WorldScore Avg.","engram":68.52,"spatia":64.47},{"label":"Static","engram":70.64,"spatia":66.65},{"label":"Dynamic","engram":66.39,"spatia":62.29}]},{"title":"Control and content","rows":[{"label":"Camera control","engram":67.31,"spatia":55.67},{"label":"Object control","engram":56.56,"spatia":65.75},{"label":"Content alignment","engram":45.04,"spatia":37.75}]},{"title":"Geometry and perception","rows":[{"label":"3D consistency","engram":85.95,"spatia":85.83},{"label":"Photometric consistency","engram":92.15,"spatia":89.49},{"label":"Style consistency","engram":87.84,"spatia":82.09},{"label":"Subjective quality","engram":59.66,"spatia":49.96}]},{"title":"Motion (dynamic subset only)","rows":[{"label":"Motion accuracy","engram":53.65,"spatia":58.27},{"label":"Motion magnitude","engram":24.22,"spatia":26.48},{"label":"Motion smoothness","engram":91.48,"spatia":71.64}]}],"table":[{"method":"Engram (ours)","cases":"stratified 100 · 80 static + 20 dynamic","vals":[68.52,70.64,66.39,67.31,56.56,45.04,85.95,92.15,87.84,59.66,53.65,24.22,91.48],"ours":true},{"method":"Spatia (our reproduction)","cases":"stratified 200 · 100 + 100","vals":[64.47,66.65,62.29,55.67,65.75,37.75,85.83,89.49,82.09,49.96,58.27,26.48,71.64],"ours":false},{"method":"LSM-World (our reproduction)","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"Voyager","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"4LC-Video","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"Wan2.2-TI2V-5B (backbone)","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"Wan2.1-I2V-14B","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"WonderWorld","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false}],"note":"<b>The two runs use different case sets — the bars are not a paired comparison.</b> Engram was scored on an 80-static / 20-dynamic stratified draw; Spatia on the full 100 + 100 stratified sample. Motion metrics are computed on the dynamic subset only (20 vs 100 scenes), so those three rows are the least comparable. Re-running Engram on the 200-case list, and Spatia on Engram's 100-case list, is pending; until then read each column within its own row group and not across methods. Static and Dynamic average the seven control/quality metrics and add the three motion metrics respectively, using WorldScore's own round-then-average rule."},"re10k":{"tiles":[{"label":"Closed-loop PSNR","value":"20.68","who":"Engram · 5 shared scenes"},{"label":"Closed-loop PSNR","value":"16.03","who":"Spatia · same 5 scenes"},{"label":"NVS PSNR","value":"18.16","who":"Engram · 5 shared scenes"},{"label":"NVS PSNR","value":"18.73","who":"Spatia · same 5 scenes"}],"agg":[{"grp":"Common 5 scenes — every method rendered the same scene IDs, target view and frame times"},{"method":"Engram","cases":"5 shared scenes","ours":true,"nvs":["18.16","0.6693","0.3106"],"closed":["20.68","0.7346","0.2325"]},{"method":"Spatia","cases":"5 shared scenes","nvs":["18.73","0.6862","0.2833"],"closed":["16.03","0.6473","0.3685"]},{"method":"ViewCrafter","cases":"5 shared scenes","nvs":["8.69","0.3526","0.7934"],"closed":["9.16","0.3089","0.7661"]},{"method":"Voyager","cases":"5 shared scenes","nvs":[null,null,null],"closed":[null,null,null]},{"grp":"Engram self-split test-100 (seed 20261026, Local-10 excluded) — baselines not yet run on this split"},{"method":"Engram","cases":"test-100","ours":true,"nvs":["17.57","0.6975","0.3212"],"closed":["20.46","0.7692","0.2200"]},{"method":"Spatia","cases":"test-100","nvs":[null,null,null],"closed":[null,null,null]},{"method":"LSM-World (repro.)","cases":"test-100","nvs":[null,null,null],"closed":[null,null,null]},{"method":"4LC-Video","cases":"test-100","nvs":[null,null,null],"closed":[null,null,null]},{"method":"FlexWorld","cases":"test-100","nvs":[null,null,null],"closed":[null,null,null]},{"grp":"Local-10 sanity set — Engram reference point only"},{"method":"Engram","cases":"Local-10","ours":true,"nvs":["18.01","0.7181","0.2530"],"closed":["19.44","0.7799","0.1939"]},{"method":"Mirage (paper)","cases":"Local-10","nvs":["18.38","0.779","0.250"],"closed":["20.05","0.825","0.228"]}],"perScene":[{"scene":"S1 · cdf439b1","task":"NVS","method":"Engram","psnr":"19.03","ssim":"0.7499","lpips":"0.3414"},{"scene":"S1 · cdf439b1","task":"NVS","method":"Spatia","psnr":"19.57","ssim":"0.7899","lpips":"0.3175"},{"scene":"S1 · cdf439b1","task":"NVS","method":"ViewCrafter","psnr":"10.65","ssim":"0.5596","lpips":"0.7927"},{"scene":"S2 · 5b8b4c35","task":"NVS","method":"Engram","psnr":"17.13","ssim":"0.6645","lpips":"0.2476"},{"scene":"S2 · 5b8b4c35","task":"NVS","method":"Spatia","psnr":"17.18","ssim":"0.6528","lpips":"0.2406"},{"scene":"S2 · 5b8b4c35","task":"NVS","method":"ViewCrafter","psnr":"8.14","ssim":"0.4049","lpips":"0.7220"},{"scene":"S3 · ce787426","task":"NVS","method":"Engram","psnr":"17.11","ssim":"0.4775","lpips":"0.3517"},{"scene":"S3 · ce787426","task":"NVS","method":"Spatia","psnr":"16.77","ssim":"0.4773","lpips":"0.3837"},{"scene":"S3 · ce787426","task":"NVS","method":"ViewCrafter","psnr":"9.51","ssim":"0.2662","lpips":"0.8321"},{"scene":"S4 · 7ed7c335","task":"NVS","method":"Engram","psnr":"18.53","ssim":"0.7302","lpips":"0.3696"},{"scene":"S4 · 7ed7c335","task":"NVS","method":"Spatia","psnr":"19.58","ssim":"0.7543","lpips":"0.2729"},{"scene":"S4 · 7ed7c335","task":"NVS","method":"ViewCrafter","psnr":"6.30","ssim":"0.2201","lpips":"0.8237"},{"scene":"S5 · 96a7bdbf","task":"NVS","method":"Engram","psnr":"18.99","ssim":"0.7243","lpips":"0.2426"},{"scene":"S5 · 96a7bdbf","task":"NVS","method":"Spatia","psnr":"20.56","ssim":"0.7568","lpips":"0.2017"},{"scene":"S5 · 96a7bdbf","task":"NVS","method":"ViewCrafter","psnr":"8.83","ssim":"0.3121","lpips":"0.7967"},{"scene":"S1 · cdf439b1","task":"Closed-loop","method":"Engram","psnr":"23.67","ssim":"0.8195","lpips":"0.1726"},{"scene":"S1 · cdf439b1","task":"Closed-loop","method":"Spatia","psnr":"18.06","ssim":"0.7355","lpips":"0.2877"},{"scene":"S1 · cdf439b1","task":"Closed-loop","method":"ViewCrafter","psnr":"12.00","ssim":"0.4524","lpips":"0.7173"},{"scene":"S2 · 5b8b4c35","task":"Closed-loop","method":"Engram","psnr":"18.83","ssim":"0.7296","lpips":"0.2116"},{"scene":"S2 · 5b8b4c35","task":"Closed-loop","method":"Spatia","psnr":"14.52","ssim":"0.6496","lpips":"0.3856"},{"scene":"S2 · 5b8b4c35","task":"Closed-loop","method":"ViewCrafter","psnr":"8.13","ssim":"0.3156","lpips":"0.6513"},{"scene":"S3 · ce787426","task":"Closed-loop","method":"Engram","psnr":"16.95","ssim":"0.4939","lpips":"0.4348"},{"scene":"S3 · ce787426","task":"Closed-loop","method":"Spatia","psnr":"15.05","ssim":"0.4109","lpips":"0.4420"},{"scene":"S3 · ce787426","task":"Closed-loop","method":"ViewCrafter","psnr":"6.88","ssim":"0.1241","lpips":"0.9161"},{"scene":"S4 · 7ed7c335","task":"Closed-loop","method":"Engram","psnr":"22.01","ssim":"0.8233","lpips":"0.1769"},{"scene":"S4 · 7ed7c335","task":"Closed-loop","method":"Spatia","psnr":"16.19","ssim":"0.7451","lpips":"0.3870"},{"scene":"S4 · 7ed7c335","task":"Closed-loop","method":"ViewCrafter","psnr":"10.64","ssim":"0.4001","lpips":"0.6769"},{"scene":"S5 · 96a7bdbf","task":"Closed-loop","method":"Engram","psnr":"21.96","ssim":"0.8067","lpips":"0.1667"},{"scene":"S5 · 96a7bdbf","task":"Closed-loop","method":"Spatia","psnr":"16.35","ssim":"0.6956","lpips":"0.3403"},{"scene":"S5 · 96a7bdbf","task":"Closed-loop","method":"ViewCrafter","psnr":"8.16","ssim":"0.2521","lpips":"0.8689"}],"note":"Scenes are the 5 drawn at random (seed 20261030) from the 90 scene IDs where all three methods finished both tasks; they were not chosen by score. NVS scores frames 1–80 of an 81-frame generation against the held-out view; closed-loop compares frame 152 of a 153-frame generation with the input image. Engram here is V22 step 8000 with scale calibration and inversion handoff. ViewCrafter generates natively at 1024×576 and is shown at its evaluation resolution. Matching scene IDs do not imply identical internal camera handling across systems. <b>These 5 cases are for qualitative inspection and are not a full-set ranking</b>; Engram's saved outputs still carry the diagnostic flag <code>formal_score=false</code>."},"status":{"ok":["RE10K · 5 scenes × 3 methods × 2 tasks rendered, scored and archived (this page's videos).","RE10K · Engram self-split test-100 complete on both protocols; closed-loop PSNR 20.46.","WorldScore · Engram scored end to end on a stratified 100-case draw; all 13 aggregates saved.","WorldScore · Spatia reproduction scored on the stratified 200-case list.","Method figure (Figure 1) redrawn as vector, regenerable from its own config."],"pending":[{"text":"WorldScore · common-case-set re-aggregation across methods (the comparison in this page's ledger is unpaired).","wait":true},{"text":"WorldScore · Voyager, LSM-World reproduction, 4LC-Video, Wan2.1/Wan2.2, WonderWorld.","wait":true},{"text":"RE10K · Spatia, ViewCrafter, Voyager, FlexWorld, 4LC-Video on the same 100-case split."},{"text":"RE10K · full-horizon runs beyond 153 frames, and motion diagnostics alongside image scores."},{"text":"Ablations (protected writes, layered readout, guarded write-back) on a shared evaluation set."},{"text":"Paper and code release."}]},"bibtex":"@article{engram2026,\n  title  = {Engram: Anchor-Protected Latent Memory for Video World Models},\n  author = {Anonymous},\n  year   = {2026},\n  note   = {Preprint, author list to be finalized}\n}","provenance":{"re10k_manifest":"report/re10k_three_methods_5cases_20261030/manifest.json","re10k_engram_100":"report/engram_re10k_final_audit_20261030/SUMMARY.csv","worldscore_spatia":"report/spatia_worldscore_strat200_20261026/worldscore.json","worldscore_engram":"Engram-main/README.md (finish 2026-10-29)"}};
-const METHODS = ["Engram", "Spatia", "ViewCrafter"];
-const COLOR = {Engram: "var(--teal)", Spatia: "var(--orange)", ViewCrafter: "var(--violet)"};
-const $ = id => document.getElementById(id);
-let selected = 0, task = "nvs", playing = false, raf = 0, epoch = 0, startFrame = 0, currentFrame = 0, videos = [];
-const scene = () => DATA.scenes[selected];
-const maxFrame = () => task === "nvs" ? 80 : 152;
-
-/* ---------- WorldScore ---------- */
-function wsTiles() {
-  $("ws-n-engram").textContent = DATA.ws.engram.n;
-  $("ws-n-spatia").textContent = DATA.ws.spatia.n;
-  $("ws-note").innerHTML = DATA.ws.note.replace("the bars are not a paired comparison", "the reported scores are not a paired comparison");
-  const rows = DATA.ws.table.filter(r => r.vals.some(v => v != null));
-  $("ws-summary").innerHTML = '<thead><tr><th>Method</th><th>Evaluation set</th><th>Average ↑</th><th>Static ↑</th><th>Dynamic ↑</th></tr></thead><tbody>' + rows.map(r => '<tr class="' + (r.ours ? 'ours' : '') + '"><td>' + r.method + '</td><td><span class="caseset">' + r.cases + '</span></td>' + r.vals.slice(0,3).map(v => '<td>' + (v == null ? '—' : v.toFixed(2)) + '</td>').join('') + '</tr>').join('') + '</tbody>';
-}
-function wsLedger() {
-  const groups = DATA.ws.groups;
-  $("ws-ledger").innerHTML = groups.map(g => `
-    <div class="grp">${g.title}</div>
-    ${g.rows.map(r => {
-      const e = r.engram, s = r.spatia;
-      const be = e == null ? "" : `<i class="e" style="width:${e}%"></i>`;
-      const bs = s == null ? "" : `<i class="s" style="width:${s}%"></i>`;
-      return `<div class="row">
-        <div class="k">${r.label}</div>
-        <div class="bars">
-          <div class="bar" title="Engram ${e == null ? "not measured" : e.toFixed(2)}">${be}</div>
-          <div class="bar" title="Spatia ${s == null ? "not measured" : s.toFixed(2)}">${bs}</div>
-        </div>
-        <div class="v">
-          <span class="${e == null ? "none" : "ve"}">${e == null ? "—" : e.toFixed(2)}</span>
-          <span class="${s == null ? "none" : "vs"}">${s == null ? "—" : s.toFixed(2)}</span>
-        </div></div>`;
-    }).join("")}`).join("");
-}
-function wsTable() {
-  const cols = ["Avg.", "Static", "Dynamic", "Cam.", "Obj.", "Content", "3D", "Photo.", "Style", "Subj.", "Acc.", "Mag.", "Smooth."];
-  const rows = DATA.ws.table;
-  $("ws-table").innerHTML = `
-    <thead><tr><th>Method</th><th>Case set</th>${cols.map((c, i) => `<th class="${i > 2 ? "tbd" : ""}">${c}</th>`).join("")}</tr></thead>
-    <tbody>${rows.map(r => `<tr class="${r.ours ? "ours" : ""}">
-      <td>${r.method}</td><td style="text-align:left"><span class="caseset">${r.cases}</span></td>
-      ${r.vals.map(v => `<td class="${v == null ? "tbd" : ""}">${v == null ? "—" : v.toFixed(2)}</td>`).join("")}
-    </tr>`).join("")}</tbody>`;
-}
-
-/* ---------- RE10K viewer ---------- */
-function pause() {
-  playing = false; cancelAnimationFrame(raf);
-  videos.forEach(v => v.pause());
-  $("play").textContent = "▶ Play together";
-}
-function seek(frame) {
-  currentFrame = Math.max(0, Math.min(maxFrame(), frame));
-  videos.forEach((v, i) => { if (v.readyState >= 1) v.currentTime = currentFrame / scene().tasks[task][METHODS[i]].fps; });
-  $("seek").value = currentFrame;
-  labels();
-}
-function labels() {
-  $("frame-label").textContent = `frame ${currentFrame} / ${maxFrame()}`;
-  $("tick-end").textContent = task === "nvs" ? "target view · 80" : "return to start · 152";
-  $("tick-start").textContent = "input frame · 0";
-}
-function tick(t) {
-  if (!playing) return;
-  const f = Math.min(maxFrame(), Math.floor(startFrame + (t - epoch) / 1000 * 24 * Number($("speed").value)));
-  currentFrame = f; $("seek").value = f; labels();
-  videos.forEach((v, i) => {
-    const fps = scene().tasks[task][METHODS[i]].fps;
-    if (v.readyState >= 2 && Math.abs(v.currentTime - f / fps) > 0.10) v.currentTime = f / fps;
-  });
-  if (f >= maxFrame()) { pause(); seek(maxFrame()); return; }
-  raf = requestAnimationFrame(tick);
-}
-async function play() {
-  if (playing) { pause(); return; }
-  if (!videos.every(v => v.readyState >= 2)) { $("status").textContent = "loading…"; return; }
-  if (currentFrame >= maxFrame()) seek(0);
-  startFrame = currentFrame;
-  videos.forEach((v, i) => v.playbackRate = 24 / scene().tasks[task][METHODS[i]].fps * Number($("speed").value));
-  try {
-    await Promise.all(videos.map(v => v.play()));
-    playing = true; epoch = performance.now();
-    $("play").textContent = "⏸ Pause";
-    raf = requestAnimationFrame(tick);
-  } catch (e) { pause(); $("error").textContent = "Playback failed: " + e.message; }
-}
-function bestOf(metric) {
-  const vals = METHODS.map(m => scene().tasks[task][m].metrics[metric]);
-  return metric === "lpips" ? Math.min(...vals) : Math.max(...vals);
-}
-function render() {
-  pause(); currentFrame = 0; $("error").textContent = "";
-  const s = scene();
-  document.querySelectorAll(".sbtn").forEach((b, i) => b.setAttribute("aria-pressed", String(i === selected)));
-  $("tab-nvs").setAttribute("aria-selected", String(task === "nvs"));
-  $("tab-closed_loop").setAttribute("aria-selected", String(task === "closed_loop"));
-  $("players").setAttribute("aria-labelledby", "tab-" + task);
-  ["nvs", "closed_loop"].forEach(t => $("tab-" + t).tabIndex = task === t ? 0 : -1);
-  $("scene-title").textContent = `Scene ${selected + 1} of 5`;
-  $("scene-meta").textContent = s.id;
-  $("players").innerHTML = METHODS.map(m => {
-    const o = s.tasks[task][m];
-    const cells = ["psnr", "ssim", "lpips"].map(k => {
-      const win = o.metrics[k] === bestOf(k);
-      const dp = k === "psnr" ? 2 : 4;
-      return `<div class="${win ? "win" : ""}"><b>${o.metrics[k].toFixed(dp)}</b>${k.toUpperCase()}${k === "lpips" ? " ↓" : " ↑"}</div>`;
-    }).join("");
-    return `<div class="pl">
-      <div class="phead"><span><i style="background:${COLOR[m]}"></i>${m}</span><span class="res">${o.width}×${o.height}</span></div>
-      <video muted playsinline preload="auto" poster="${s.input}" aria-label="${m} ${task === 'nvs' ? 'novel view synthesis' : 'closed-loop revisit'}" src="${o.video}"></video>
-      <div class="pm">${cells}</div></div>`;
-  }).join("");
-  videos = [...document.querySelectorAll("#players video")];
-  videos.forEach(v => {
-    v.onloadeddata = () => { $("status").textContent = `loaded ${videos.filter(x => x.readyState >= 2).length}/3`; };
-    v.onerror = () => { $("error").textContent = "This video could not be loaded. Please refresh the page to try again."; };
-  });
-  $("seek").max = maxFrame(); $("seek").value = 0; labels();
-  $("status").textContent = "loading videos…";
-  $("stills").innerHTML = `<figure><img src="${s.input}" alt="Input frame"><figcaption>Input · frame 0</figcaption></figure>` +
-    METHODS.map(m => `<figure><img src="${s.tasks[task][m].last_frame}" alt="${m} final frame"><figcaption>${m} · frame ${maxFrame()}</figcaption></figure>`).join("");
-  document.querySelectorAll("#stills img").forEach(img => {
-    img.tabIndex = 0; img.setAttribute("role", "button");
-    img.setAttribute("aria-label", "Enlarge " + img.alt);
-    const open = () => { $("zoom-img").src = img.src; $("zoom").showModal(); };
-    img.onclick = open;
-    img.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } };
-  });
-}
-function re10kTiles() {
-  $("re10k-note").innerHTML = DATA.re10k.note;
-}
-function re10kTables() {
-  const agg = DATA.re10k.agg;
-  $("re10k-agg").innerHTML = `<thead><tr><th>Method</th><th>Case set</th>
-      <th colspan="3" style="text-align:center">NVS · 81 frames</th>
-      <th colspan="3" style="text-align:center">Closed-loop · 153 frames</th></tr>
-      <tr><th></th><th></th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th></tr></thead>
-    <tbody>${agg.map(r => r.grp
-      ? `<tr class="grprow"><td colspan="8">${r.grp}</td></tr>`
-      : `<tr class="${r.ours ? "ours" : ""}">
-      <td>${r.method}</td><td style="text-align:left"><span class="caseset">${r.cases}</span></td>
-      ${r.nvs.map(v => `<td class="${v == null ? "tbd" : ""}">${v == null ? "—" : v}</td>`).join("")}
-      ${r.closed.map(v => `<td class="${v == null ? "tbd" : ""}">${v == null ? "—" : v}</td>`).join("")}
-    </tr>`).join("")}</tbody>`;
-  const all = DATA.re10k.perScene;
-  $("re10k-all").innerHTML = `<thead><tr><th>Scene</th><th>Task</th><th>Method</th><th>PSNR↑</th><th>SSIM↑</th><th>LPIPS↓</th></tr></thead>
-    <tbody>${all.map(r => `<tr><td>${r.scene}</td><td>${r.task}</td><td>${r.method}</td>
-      <td>${r.psnr}</td><td>${r.ssim}</td><td>${r.lpips}</td></tr>`).join("")}</tbody>`;
-}
-function statusLists() {
-  $("status-ok").innerHTML = DATA.status.ok.map(x => `<li><i class="ok"></i><span>${x}</span></li>`).join("");
-  $("status-pending").innerHTML = DATA.status.pending.map(x => `<li><i class="${x.wait ? "wait" : "no"}"></i><span>${x.text}</span></li>`).join("");
-}
-
-/* ---------- lead demonstration ---------- */
-let teaserSelected = 0;
-const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-function teaserScene(index) {
-  teaserSelected = index;
-  const s = DATA.scenes[index], o = s.tasks.closed_loop.Engram, v = $("teaser-video");
-  v.pause(); v.src = o.video; v.poster = s.input;
-  v.autoplay = !reducedMotion.matches;
-  $("teaser-input").src = s.input;
-  $("teaser-return").src = o.last_frame;
-  $("teaser-input").alt = "Scene " + (index + 1) + ": real input frame";
-  $("teaser-return").alt = "Scene " + (index + 1) + ": Engram final frame at the initial camera pose";
-  document.querySelectorAll(".teaser-scenes button").forEach((b,i) => b.setAttribute("aria-pressed",String(i === index)));
-  v.load();
-  if (!reducedMotion.matches) v.play().catch(() => {});
-}
-$("teaser-scenes").innerHTML = DATA.scenes.map((s,i) => '<button type="button" aria-label="Show teaser scene ' + (i+1) + '" aria-pressed="' + (i === 0) + '" data-i="' + i + '"><img src="' + s.input + '" alt=""></button>').join('');
-document.querySelectorAll(".teaser-scenes button").forEach(b => b.onclick = () => teaserScene(Number(b.dataset.i)));
-teaserScene(0);
-reducedMotion.addEventListener("change", () => { if(reducedMotion.matches) $("teaser-video").pause(); });
-const teaserObserver = new IntersectionObserver(entries => {
-  for (const e of entries) {
-    if (!e.isIntersecting) $("teaser-video").pause();
-  }
-}, { threshold: 0.05 });
-teaserObserver.observe($("teaser-video"));
-
-/* ---------- wire up ---------- */
-wsTiles(); wsLedger(); wsTable(); re10kTiles(); re10kTables(); statusLists();
-$("bib").textContent = DATA.bibtex;
-$("re10k-summary").innerHTML = $("re10k-agg").innerHTML;
-[...$("re10k-summary").tBodies[0].rows].forEach((row,i) => {
-  const r = DATA.re10k.agg[i];
-  if (!r.grp && !r.nvs.concat(r.closed).some(v => v != null)) row.remove();
-});
-
-$("scene-nav").innerHTML = DATA.scenes.map((s, i) => `<button class="sbtn" aria-pressed="${i === 0}" data-i="${i}">
-    <img src="${s.input}" alt="Scene ${i + 1} input"><b>Scene ${i + 1}</b><span>${s.id}</span></button>`).join("");
-document.querySelectorAll(".sbtn").forEach(b => b.onclick = () => { selected = Number(b.dataset.i); render(); });
-["nvs", "closed_loop"].forEach(t => {
-  $("tab-" + t).onclick = () => { task = t; render(); };
-  $("tab-" + t).onkeydown = e => {
-    if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
-      e.preventDefault();
-      task = e.key === "Home" ? "nvs" : e.key === "End" ? "closed_loop" : task === "nvs" ? "closed_loop" : "nvs";
-      render(); $("tab-" + task).focus();
-    }
-  };
-});
-$("play").onclick = play;
-$("reset").onclick = () => { pause(); seek(0); };
-$("last").onclick = () => { pause(); seek(maxFrame()); };
-$("prev").onclick = () => { pause(); seek(currentFrame - 1); };
-$("next").onclick = () => { pause(); seek(currentFrame + 1); };
-$("seek").oninput = e => { pause(); seek(Number(e.target.value)); };
-$("speed").onchange = () => { pause(); seek(currentFrame); };
-$("zoom-close").onclick = () => $("zoom").close();
-$("zoom").onclick = e => { if (e.target === $("zoom")) $("zoom").close(); };
-document.addEventListener("keydown", e => {
-  if (e.target.closest("input, select, button, a, video, summary, [role=button], [contenteditable=true]") || $("zoom").open) return;
-  const viewerBox = $("players").getBoundingClientRect();
-  if (viewerBox.bottom < 0 || viewerBox.top > innerHeight) return;
-  if (e.key === "ArrowRight") { pause(); seek(currentFrame + 1); }
-  if (e.key === "ArrowLeft") { pause(); seek(currentFrame - 1); }
-  if (e.key === " ") { e.preventDefault(); play(); }
-});
-render();
-</script>
-</body></html>
+<footer class="wrap"><a class="footer-brand" href="#top">Engram</a><span>Anchor-Protected Latent Memory for Video World Models</span><a href="showcase-manifest.json">Example sources ↗</a></footer>
+<script>const DATA = {"scenes":[{"id":"cdf439b17a6a98d4","input":"media/cdf439b17a6a98d4_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/cdf439b17a6a98d4_nvs_engram.mp4","last_frame":"media/cdf439b17a6a98d4_nvs_engram_last.jpg","metrics":{"psnr":19.032364082336425,"ssim":0.7498906292021275,"lpips":0.34143285560421643},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/cdf439b17a6a98d4_nvs_spatia.mp4","last_frame":"media/cdf439b17a6a98d4_nvs_spatia_last.jpg","metrics":{"psnr":19.567040169239043,"ssim":0.7899113945662976,"lpips":0.3174958860501647},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/cdf439b17a6a98d4_nvs_viewcrafter.mp4","last_frame":"media/cdf439b17a6a98d4_nvs_viewcrafter_last.jpg","metrics":{"psnr":10.651471018791199,"ssim":0.5596061319112777,"lpips":0.7926822546869516},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/cdf439b17a6a98d4_closed_loop_engram.mp4","last_frame":"media/cdf439b17a6a98d4_closed_loop_engram_last.jpg","metrics":{"psnr":23.672653198242188,"ssim":0.8195302486419678,"lpips":0.17262130975723267},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/cdf439b17a6a98d4_closed_loop_spatia.mp4","last_frame":"media/cdf439b17a6a98d4_closed_loop_spatia_last.jpg","metrics":{"psnr":18.064783096313477,"ssim":0.7354676723480225,"lpips":0.2876731753349304},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/cdf439b17a6a98d4_closed_loop_viewcrafter.mp4","last_frame":"media/cdf439b17a6a98d4_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":11.99752426147461,"ssim":0.4523509442806244,"lpips":0.7173474431037903},"fps":24.0,"frames":153,"width":1280,"height":704}}}},{"id":"5b8b4c355672dbb3","input":"media/5b8b4c355672dbb3_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/5b8b4c355672dbb3_nvs_engram.mp4","last_frame":"media/5b8b4c355672dbb3_nvs_engram_last.jpg","metrics":{"psnr":17.132093238830567,"ssim":0.6645224012434483,"lpips":0.24760490362532436},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/5b8b4c355672dbb3_nvs_spatia.mp4","last_frame":"media/5b8b4c355672dbb3_nvs_spatia_last.jpg","metrics":{"psnr":17.18221709728241,"ssim":0.652764318883419,"lpips":0.2405756120570004},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/5b8b4c355672dbb3_nvs_viewcrafter.mp4","last_frame":"media/5b8b4c355672dbb3_nvs_viewcrafter_last.jpg","metrics":{"psnr":8.143161219358444,"ssim":0.404913988057524,"lpips":0.722029871866107},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/5b8b4c355672dbb3_closed_loop_engram.mp4","last_frame":"media/5b8b4c355672dbb3_closed_loop_engram_last.jpg","metrics":{"psnr":18.831356048583984,"ssim":0.7296141386032104,"lpips":0.2115725427865982},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/5b8b4c355672dbb3_closed_loop_spatia.mp4","last_frame":"media/5b8b4c355672dbb3_closed_loop_spatia_last.jpg","metrics":{"psnr":14.52079963684082,"ssim":0.6495606899261475,"lpips":0.38562822341918945},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/5b8b4c355672dbb3_closed_loop_viewcrafter.mp4","last_frame":"media/5b8b4c355672dbb3_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":8.134588241577148,"ssim":0.31564071774482727,"lpips":0.6512725949287415},"fps":24.0,"frames":153,"width":1280,"height":704}}}},{"id":"ce78742674686c71","input":"media/ce78742674686c71_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/ce78742674686c71_nvs_engram.mp4","last_frame":"media/ce78742674686c71_nvs_engram_last.jpg","metrics":{"psnr":17.1082302570343,"ssim":0.47752669006586074,"lpips":0.35168290659785273},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/ce78742674686c71_nvs_spatia.mp4","last_frame":"media/ce78742674686c71_nvs_spatia_last.jpg","metrics":{"psnr":16.771570134162904,"ssim":0.47734697423875333,"lpips":0.3837134034372866},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/ce78742674686c71_nvs_viewcrafter.mp4","last_frame":"media/ce78742674686c71_nvs_viewcrafter_last.jpg","metrics":{"psnr":9.509265381097794,"ssim":0.2662367929704487,"lpips":0.8320716582238674},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/ce78742674686c71_closed_loop_engram.mp4","last_frame":"media/ce78742674686c71_closed_loop_engram_last.jpg","metrics":{"psnr":16.948341369628906,"ssim":0.4939488172531128,"lpips":0.4347684383392334},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/ce78742674686c71_closed_loop_spatia.mp4","last_frame":"media/ce78742674686c71_closed_loop_spatia_last.jpg","metrics":{"psnr":15.045755386352539,"ssim":0.41090211272239685,"lpips":0.44200360774993896},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/ce78742674686c71_closed_loop_viewcrafter.mp4","last_frame":"media/ce78742674686c71_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":6.876156806945801,"ssim":0.12405173480510712,"lpips":0.9160600304603577},"fps":24.0,"frames":153,"width":1280,"height":704}}}},{"id":"7ed7c335dba256b8","input":"media/7ed7c335dba256b8_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/7ed7c335dba256b8_nvs_engram.mp4","last_frame":"media/7ed7c335dba256b8_nvs_engram_last.jpg","metrics":{"psnr":18.52861491441727,"ssim":0.7301924400031566,"lpips":0.369636547844857},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/7ed7c335dba256b8_nvs_spatia.mp4","last_frame":"media/7ed7c335dba256b8_nvs_spatia_last.jpg","metrics":{"psnr":19.582685780525207,"ssim":0.7542791724205017,"lpips":0.2729294938966632},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/7ed7c335dba256b8_nvs_viewcrafter.mp4","last_frame":"media/7ed7c335dba256b8_nvs_viewcrafter_last.jpg","metrics":{"psnr":6.298288589715957,"ssim":0.22008703025057913,"lpips":0.8237092703580856},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/7ed7c335dba256b8_closed_loop_engram.mp4","last_frame":"media/7ed7c335dba256b8_closed_loop_engram_last.jpg","metrics":{"psnr":22.007549285888672,"ssim":0.8232951760292053,"lpips":0.17691275477409363},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/7ed7c335dba256b8_closed_loop_spatia.mp4","last_frame":"media/7ed7c335dba256b8_closed_loop_spatia_last.jpg","metrics":{"psnr":16.19355583190918,"ssim":0.7450903058052063,"lpips":0.3869561553001404},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/7ed7c335dba256b8_closed_loop_viewcrafter.mp4","last_frame":"media/7ed7c335dba256b8_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":10.64366340637207,"ssim":0.40012678503990173,"lpips":0.6769161820411682},"fps":24.0,"frames":153,"width":1280,"height":704}}}},{"id":"96a7bdbfc462408d","input":"media/96a7bdbfc462408d_input.jpg","tasks":{"nvs":{"Engram":{"video":"media/96a7bdbfc462408d_nvs_engram.mp4","last_frame":"media/96a7bdbfc462408d_nvs_engram_last.jpg","metrics":{"psnr":18.988112843036653,"ssim":0.7243035197257995,"lpips":0.2425638717599213},"fps":24.0,"frames":81,"width":1280,"height":704},"Spatia":{"video":"media/96a7bdbfc462408d_nvs_spatia.mp4","last_frame":"media/96a7bdbfc462408d_nvs_spatia_last.jpg","metrics":{"psnr":20.558604073524474,"ssim":0.756799204647541,"lpips":0.20167222702875734},"fps":24.0,"frames":81,"width":1280,"height":704},"ViewCrafter":{"video":"media/96a7bdbfc462408d_nvs_viewcrafter.mp4","last_frame":"media/96a7bdbfc462408d_nvs_viewcrafter_last.jpg","metrics":{"psnr":8.825031119585038,"ssim":0.3120632767677307,"lpips":0.7967016622424126},"fps":24.0,"frames":81,"width":1280,"height":704}},"closed_loop":{"Engram":{"video":"media/96a7bdbfc462408d_closed_loop_engram.mp4","last_frame":"media/96a7bdbfc462408d_closed_loop_engram_last.jpg","metrics":{"psnr":21.955657958984375,"ssim":0.8066689372062683,"lpips":0.1666511446237564},"fps":24.0,"frames":153,"width":1280,"height":704},"Spatia":{"video":"media/96a7bdbfc462408d_closed_loop_spatia.mp4","last_frame":"media/96a7bdbfc462408d_closed_loop_spatia_last.jpg","metrics":{"psnr":16.345930099487305,"ssim":0.6955522894859314,"lpips":0.34028077125549316},"fps":24.0,"frames":153,"width":1280,"height":704},"ViewCrafter":{"video":"media/96a7bdbfc462408d_closed_loop_viewcrafter.mp4","last_frame":"media/96a7bdbfc462408d_closed_loop_viewcrafter_last.jpg","metrics":{"psnr":8.15760612487793,"ssim":0.25213125348091125,"lpips":0.8689360022544861},"fps":24.0,"frames":153,"width":1280,"height":704}}}}],"ws":{"engram":{"n":"stratified 100 · 80 + 20"},"spatia":{"n":"stratified 200 · 100 + 100"},"tiles":[{"label":"WorldScore Avg.","value":"68.52","who":"Engram · stratified 100"},{"label":"Dynamic","value":"66.39","who":"Engram · 20 dynamic scenes"},{"label":"WorldScore Avg.","value":"64.47","who":"Spatia · stratified 200"},{"label":"Remaining baselines","value":"pending","who":"Voyager · LSM · 4LC · Wan · WonderWorld","pending":true}],"groups":[{"title":"Overall","rows":[{"label":"WorldScore Avg.","engram":68.52,"spatia":64.47},{"label":"Static","engram":70.64,"spatia":66.65},{"label":"Dynamic","engram":66.39,"spatia":62.29}]},{"title":"Control and content","rows":[{"label":"Camera control","engram":67.31,"spatia":55.67},{"label":"Object control","engram":56.56,"spatia":65.75},{"label":"Content alignment","engram":45.04,"spatia":37.75}]},{"title":"Geometry and perception","rows":[{"label":"3D consistency","engram":85.95,"spatia":85.83},{"label":"Photometric consistency","engram":92.15,"spatia":89.49},{"label":"Style consistency","engram":87.84,"spatia":82.09},{"label":"Subjective quality","engram":59.66,"spatia":49.96}]},{"title":"Motion (dynamic subset only)","rows":[{"label":"Motion accuracy","engram":53.65,"spatia":58.27},{"label":"Motion magnitude","engram":24.22,"spatia":26.48},{"label":"Motion smoothness","engram":91.48,"spatia":71.64}]}],"table":[{"method":"Engram (ours)","cases":"stratified 100 · 80 static + 20 dynamic","vals":[68.52,70.64,66.39,67.31,56.56,45.04,85.95,92.15,87.84,59.66,53.65,24.22,91.48],"ours":true},{"method":"Spatia (our reproduction)","cases":"stratified 200 · 100 + 100","vals":[64.47,66.65,62.29,55.67,65.75,37.75,85.83,89.49,82.09,49.96,58.27,26.48,71.64],"ours":false},{"method":"LSM-World (our reproduction)","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"Voyager","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"4LC-Video","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"Wan2.2-TI2V-5B (backbone)","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"Wan2.1-I2V-14B","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false},{"method":"WonderWorld","cases":"pending","vals":[null,null,null,null,null,null,null,null,null,null,null,null,null],"ours":false}],"note":"<b>The two runs use different case sets — the bars are not a paired comparison.</b> Engram was scored on an 80-static / 20-dynamic stratified draw; Spatia on the full 100 + 100 stratified sample. Motion metrics are computed on the dynamic subset only (20 vs 100 scenes), so those three rows are the least comparable. Re-running Engram on the 200-case list, and Spatia on Engram's 100-case list, is pending; until then read each column within its own row group and not across methods. Static and Dynamic average the seven control/quality metrics and add the three motion metrics respectively, using WorldScore's own round-then-average rule."},"re10k":{"tiles":[{"label":"Closed-loop PSNR","value":"20.68","who":"Engram · 5 shared scenes"},{"label":"Closed-loop PSNR","value":"16.03","who":"Spatia · same 5 scenes"},{"label":"NVS PSNR","value":"18.16","who":"Engram · 5 shared scenes"},{"label":"NVS PSNR","value":"18.73","who":"Spatia · same 5 scenes"}],"agg":[{"grp":"Common 5 scenes — every method rendered the same scene IDs, target view and frame times"},{"method":"Engram","cases":"5 shared scenes","ours":true,"nvs":["18.16","0.6693","0.3106"],"closed":["20.68","0.7346","0.2325"]},{"method":"Spatia","cases":"5 shared scenes","nvs":["18.73","0.6862","0.2833"],"closed":["16.03","0.6473","0.3685"]},{"method":"ViewCrafter","cases":"5 shared scenes","nvs":["8.69","0.3526","0.7934"],"closed":["9.16","0.3089","0.7661"]},{"method":"Voyager","cases":"5 shared scenes","nvs":[null,null,null],"closed":[null,null,null]},{"grp":"Engram self-split test-100 (seed 20261026, Local-10 excluded) — baselines not yet run on this split"},{"method":"Engram","cases":"test-100","ours":true,"nvs":["17.57","0.6975","0.3212"],"closed":["20.46","0.7692","0.2200"]},{"method":"Spatia","cases":"test-100","nvs":[null,null,null],"closed":[null,null,null]},{"method":"LSM-World (repro.)","cases":"test-100","nvs":[null,null,null],"closed":[null,null,null]},{"method":"4LC-Video","cases":"test-100","nvs":[null,null,null],"closed":[null,null,null]},{"method":"FlexWorld","cases":"test-100","nvs":[null,null,null],"closed":[null,null,null]},{"grp":"Local-10 sanity set — Engram reference point only"},{"method":"Engram","cases":"Local-10","ours":true,"nvs":["18.01","0.7181","0.2530"],"closed":["19.44","0.7799","0.1939"]},{"method":"Mirage (paper)","cases":"Local-10","nvs":["18.38","0.779","0.250"],"closed":["20.05","0.825","0.228"]}],"perScene":[{"scene":"S1 · cdf439b1","task":"NVS","method":"Engram","psnr":"19.03","ssim":"0.7499","lpips":"0.3414"},{"scene":"S1 · cdf439b1","task":"NVS","method":"Spatia","psnr":"19.57","ssim":"0.7899","lpips":"0.3175"},{"scene":"S1 · cdf439b1","task":"NVS","method":"ViewCrafter","psnr":"10.65","ssim":"0.5596","lpips":"0.7927"},{"scene":"S2 · 5b8b4c35","task":"NVS","method":"Engram","psnr":"17.13","ssim":"0.6645","lpips":"0.2476"},{"scene":"S2 · 5b8b4c35","task":"NVS","method":"Spatia","psnr":"17.18","ssim":"0.6528","lpips":"0.2406"},{"scene":"S2 · 5b8b4c35","task":"NVS","method":"ViewCrafter","psnr":"8.14","ssim":"0.4049","lpips":"0.7220"},{"scene":"S3 · ce787426","task":"NVS","method":"Engram","psnr":"17.11","ssim":"0.4775","lpips":"0.3517"},{"scene":"S3 · ce787426","task":"NVS","method":"Spatia","psnr":"16.77","ssim":"0.4773","lpips":"0.3837"},{"scene":"S3 · ce787426","task":"NVS","method":"ViewCrafter","psnr":"9.51","ssim":"0.2662","lpips":"0.8321"},{"scene":"S4 · 7ed7c335","task":"NVS","method":"Engram","psnr":"18.53","ssim":"0.7302","lpips":"0.3696"},{"scene":"S4 · 7ed7c335","task":"NVS","method":"Spatia","psnr":"19.58","ssim":"0.7543","lpips":"0.2729"},{"scene":"S4 · 7ed7c335","task":"NVS","method":"ViewCrafter","psnr":"6.30","ssim":"0.2201","lpips":"0.8237"},{"scene":"S5 · 96a7bdbf","task":"NVS","method":"Engram","psnr":"18.99","ssim":"0.7243","lpips":"0.2426"},{"scene":"S5 · 96a7bdbf","task":"NVS","method":"Spatia","psnr":"20.56","ssim":"0.7568","lpips":"0.2017"},{"scene":"S5 · 96a7bdbf","task":"NVS","method":"ViewCrafter","psnr":"8.83","ssim":"0.3121","lpips":"0.7967"},{"scene":"S1 · cdf439b1","task":"Closed-loop","method":"Engram","psnr":"23.67","ssim":"0.8195","lpips":"0.1726"},{"scene":"S1 · cdf439b1","task":"Closed-loop","method":"Spatia","psnr":"18.06","ssim":"0.7355","lpips":"0.2877"},{"scene":"S1 · cdf439b1","task":"Closed-loop","method":"ViewCrafter","psnr":"12.00","ssim":"0.4524","lpips":"0.7173"},{"scene":"S2 · 5b8b4c35","task":"Closed-loop","method":"Engram","psnr":"18.83","ssim":"0.7296","lpips":"0.2116"},{"scene":"S2 · 5b8b4c35","task":"Closed-loop","method":"Spatia","psnr":"14.52","ssim":"0.6496","lpips":"0.3856"},{"scene":"S2 · 5b8b4c35","task":"Closed-loop","method":"ViewCrafter","psnr":"8.13","ssim":"0.3156","lpips":"0.6513"},{"scene":"S3 · ce787426","task":"Closed-loop","method":"Engram","psnr":"16.95","ssim":"0.4939","lpips":"0.4348"},{"scene":"S3 · ce787426","task":"Closed-loop","method":"Spatia","psnr":"15.05","ssim":"0.4109","lpips":"0.4420"},{"scene":"S3 · ce787426","task":"Closed-loop","method":"ViewCrafter","psnr":"6.88","ssim":"0.1241","lpips":"0.9161"},{"scene":"S4 · 7ed7c335","task":"Closed-loop","method":"Engram","psnr":"22.01","ssim":"0.8233","lpips":"0.1769"},{"scene":"S4 · 7ed7c335","task":"Closed-loop","method":"Spatia","psnr":"16.19","ssim":"0.7451","lpips":"0.3870"},{"scene":"S4 · 7ed7c335","task":"Closed-loop","method":"ViewCrafter","psnr":"10.64","ssim":"0.4001","lpips":"0.6769"},{"scene":"S5 · 96a7bdbf","task":"Closed-loop","method":"Engram","psnr":"21.96","ssim":"0.8067","lpips":"0.1667"},{"scene":"S5 · 96a7bdbf","task":"Closed-loop","method":"Spatia","psnr":"16.35","ssim":"0.6956","lpips":"0.3403"},{"scene":"S5 · 96a7bdbf","task":"Closed-loop","method":"ViewCrafter","psnr":"8.16","ssim":"0.2521","lpips":"0.8689"}],"note":"Scenes are the 5 drawn at random (seed 20261030) from the 90 scene IDs where all three methods finished both tasks; they were not chosen by score. NVS scores frames 1–80 of an 81-frame generation against the held-out view; closed-loop compares frame 152 of a 153-frame generation with the input image. Engram here is V22 step 8000 with scale calibration and inversion handoff. ViewCrafter generates natively at 1024×576 and is shown at its evaluation resolution. Matching scene IDs do not imply identical internal camera handling across systems. <b>These 5 cases are for qualitative inspection and are not a full-set ranking</b>; Engram's saved outputs still carry the diagnostic flag <code>formal_score=false</code>."},"status":{"ok":["RE10K · 5 scenes × 3 methods × 2 tasks rendered, scored and archived (this page's videos).","RE10K · Engram self-split test-100 complete on both protocols; closed-loop PSNR 20.46.","WorldScore · Engram scored end to end on a stratified 100-case draw; all 13 aggregates saved.","WorldScore · Spatia reproduction scored on the stratified 200-case list.","Method figure (Figure 1) redrawn as vector, regenerable from its own config."],"pending":[{"text":"WorldScore · common-case-set re-aggregation across methods (the comparison in this page's ledger is unpaired).","wait":true},{"text":"WorldScore · Voyager, LSM-World reproduction, 4LC-Video, Wan2.1/Wan2.2, WonderWorld.","wait":true},{"text":"RE10K · Spatia, ViewCrafter, Voyager, FlexWorld, 4LC-Video on the same 100-case split."},{"text":"RE10K · full-horizon runs beyond 153 frames, and motion diagnostics alongside image scores."},{"text":"Ablations (protected writes, layered readout, guarded write-back) on a shared evaluation set."},{"text":"Paper and code release."}]},"bibtex":"@article{engram2026,\n  title  = {Engram: Anchor-Protected Latent Memory for Video World Models},\n  author = {Anonymous},\n  year   = {2026},\n  note   = {Preprint, author list to be finalized}\n}","provenance":{"re10k_manifest":"report/re10k_three_methods_5cases_20261030/manifest.json","re10k_engram_100":"report/engram_re10k_final_audit_20261030/SUMMARY.csv","worldscore_spatia":"report/spatia_worldscore_strat200_20261026/worldscore.json","worldscore_engram":"Engram-main/README.md (finish 2026-10-29)"}};</script>
+</body>
+</html>
