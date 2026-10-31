@@ -1,0 +1,44 @@
+{
+  "time": "2026-10-30",
+  "selection": "random.Random(20261030).sample(sorted(common_complete_scene_ids),5); both tasks complete; no metric ranking",
+  "eligible_count": 90,
+  "seed": 20261030,
+  "scenes": [
+    {
+      "scene_id": "cdf439b17a6a98d4",
+      "engram_case": "035_cdf439b17a6a98d4",
+      "baseline_case": "037_cdf439b17a6a98d4"
+    },
+    {
+      "scene_id": "5b8b4c355672dbb3",
+      "engram_case": "041_5b8b4c355672dbb3",
+      "baseline_case": "043_5b8b4c355672dbb3"
+    },
+    {
+      "scene_id": "ce78742674686c71",
+      "engram_case": "077_ce78742674686c71",
+      "baseline_case": "080_ce78742674686c71"
+    },
+    {
+      "scene_id": "7ed7c335dba256b8",
+      "engram_case": "032_7ed7c335dba256b8",
+      "baseline_case": "034_7ed7c335dba256b8"
+    },
+    {
+      "scene_id": "96a7bdbfc462408d",
+      "engram_case": "029_96a7bdbfc462408d",
+      "baseline_case": "031_96a7bdbfc462408d"
+    }
+  ],
+  "provenance": {
+    "re10k_manifest": "report/re10k_three_methods_5cases_20261030/manifest.json",
+    "re10k_engram_100": "report/engram_re10k_final_audit_20261030/SUMMARY.csv",
+    "worldscore_spatia": "report/spatia_worldscore_strat200_20261026/worldscore.json",
+    "worldscore_engram": "Engram-main/README.md (finish 2026-10-29)"
+  },
+  "notes": [
+    "Media in media/ is a transcoded web copy: 960 px wide, H.264 CRF 26, audio stripped.",
+    "Originals live in report/re10k_three_methods_5cases_20261030/media/ and are unmodified.",
+    "Bitrate is not an evaluation artifact; all metrics were computed from the original videos."
+  ]
+}

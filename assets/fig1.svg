@@ -1,0 +1,342 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1060" viewBox="0 0 1600 1060">
+<title>Engram figure 1: anchor-protected latent memory</title>
+<desc>Conceptual figure, not experimental output. A static room is observed, explored, and revisited. The mechanism protects observed latent anchors, reads two spatial layers while reserving a real candidate, generates a video chunk, and filters generated memory writes using the initial-view surface. A secondary path uses latent inversion for the next chunk prefix.</desc>
+<rect width="1600" height="1060" fill="white"/>
+<text x="42" y="43" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" text-anchor="start" fill="#167D8D">ENGRAM</text>
+<text x="207" y="43" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="500" text-anchor="start" fill="#21323D">Anchor-protected latent memory for video generation</text>
+<text x="1558" y="74" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="400" text-anchor="end" fill="#63727C">SCHEMATIC ILLUSTRATION  ·  not experimental output</text>
+<line x1="42" y1="88" x2="1558" y2="88" stroke="#B9C5CB" stroke-width="1.3"/>
+<text x="42" y="122" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#21323D">a</text>
+<text x="74" y="122" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600" text-anchor="start" fill="#21323D">Observe, explore, and revisit</text>
+<text x="52" y="160" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="500" text-anchor="start" fill="#21323D">Observed view A  ·  I0</text>
+<g transform="translate(52 175) scale(1.0 1.0)">
+<rect x="0" y="0" width="330" height="170" rx="4" fill="#F4F1EB" stroke="#B9C5CB" stroke-width="1.5"/>
+<polygon points="0,0 62,32 62,118 0,170" fill="#E8E3DC" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="62,118 270,118 330,170 0,170" fill="#E6D7C2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="270,32 330,0 330,170 270,118" fill="#EEE9E2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="62" y="32" width="208" height="86" rx="0" fill="#F7F4EE" stroke="none" stroke-width="1.5"/>
+<line x1="62" y1="32" x2="62" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="270" y1="32" x2="270" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="0" y1="170" x2="62" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<line x1="330" y1="170" x2="270" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<rect x="83" y="46" width="65" height="58" rx="0" fill="#C8DEE0" stroke="#A6BDBF" stroke-width="2"/>
+<line x1="115.5" y1="46" x2="115.5" y2="104" stroke="#F9FCFC" stroke-width="3"/>
+<line x1="83" y1="76" x2="148" y2="76" stroke="#F9FCFC" stroke-width="3"/>
+<rect x="184" y="51" width="43" height="31" rx="0" fill="#DED3C4" stroke="#AA9E90" stroke-width="2"/>
+<polygon points="190,76 201,60 210,70 221,59 221,76" fill="#B0C3BA" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="168" y="100" width="77" height="30" rx="5" fill="#B5C1BE" stroke="#98AAA5" stroke-width="1.5"/>
+<rect x="164" y="112" width="85" height="21" rx="4" fill="#A6B6B1" stroke="none" stroke-width="1.5"/>
+<line x1="174" y1="132" x2="174" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<line x1="240" y1="132" x2="240" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<polygon points="81,132 141,132 155,144 66,144" fill="#C7A981" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<line x1="78" y1="144" x2="78" y2="159" stroke="#A98B65" stroke-width="3"/>
+<line x1="145" y1="144" x2="145" y2="159" stroke="#A98B65" stroke-width="3"/>
+<rect x="78" y="41" width="76" height="69" rx="3" fill="none" stroke="#167D8D" stroke-width="3"/>
+</g>
+<text x="635" y="160" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="500" text-anchor="start" fill="#21323D">Generated novel view B</text>
+<g transform="translate(635 175) scale(1.0 1.0)">
+<rect x="0" y="0" width="330" height="170" rx="4" fill="#F4F1EB" stroke="#B9C5CB" stroke-width="1.5"/>
+<polygon points="0,0 62,32 62,118 0,170" fill="#E8E3DC" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="62,118 270,118 330,170 0,170" fill="#E6D7C2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="270,32 330,0 330,170 270,118" fill="#EEE9E2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="62" y="32" width="208" height="86" rx="0" fill="#F7F4EE" stroke="none" stroke-width="1.5"/>
+<line x1="62" y1="32" x2="62" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="270" y1="32" x2="270" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="0" y1="170" x2="62" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<line x1="330" y1="170" x2="270" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<rect x="177" y="46" width="53" height="73" rx="0" fill="#D9C5A8" stroke="#BDA687" stroke-width="2"/>
+<circle cx="219" cy="87" r="2.5" fill="#8A7B68" stroke="none" stroke-width="1.5"/>
+<rect x="82" y="51" width="52" height="30" rx="0" fill="#DDD6CA" stroke="#AAA69B" stroke-width="2"/>
+<rect x="87" y="96" width="65" height="26" rx="3" fill="#C4B198" stroke="#A99478" stroke-width="1.5"/>
+<line x1="95" y1="122" x2="95" y2="138" stroke="#A99478" stroke-width="3"/>
+<line x1="145" y1="122" x2="145" y2="138" stroke="#A99478" stroke-width="3"/>
+<line x1="256" y1="72" x2="256" y2="129" stroke="#89958C" stroke-width="3"/>
+<polygon points="240,76 249,58 262,58 274,76" fill="#DFCFA8" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="246,130 267,130 272,135 241,135" fill="#89958C" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+</g>
+<text x="1218" y="160" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="500" text-anchor="start" fill="#21323D">Generated revisit of A</text>
+<g transform="translate(1218 175) scale(1.0 1.0)">
+<rect x="0" y="0" width="330" height="170" rx="4" fill="#F4F1EB" stroke="#B9C5CB" stroke-width="1.5"/>
+<polygon points="0,0 62,32 62,118 0,170" fill="#E8E3DC" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="62,118 270,118 330,170 0,170" fill="#E6D7C2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="270,32 330,0 330,170 270,118" fill="#EEE9E2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="62" y="32" width="208" height="86" rx="0" fill="#F7F4EE" stroke="none" stroke-width="1.5"/>
+<line x1="62" y1="32" x2="62" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="270" y1="32" x2="270" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="0" y1="170" x2="62" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<line x1="330" y1="170" x2="270" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<rect x="83" y="46" width="65" height="58" rx="0" fill="#C8DEE0" stroke="#A6BDBF" stroke-width="2"/>
+<line x1="115.5" y1="46" x2="115.5" y2="104" stroke="#F9FCFC" stroke-width="3"/>
+<line x1="83" y1="76" x2="148" y2="76" stroke="#F9FCFC" stroke-width="3"/>
+<rect x="184" y="51" width="43" height="31" rx="0" fill="#DED3C4" stroke="#AA9E90" stroke-width="2"/>
+<polygon points="190,76 201,60 210,70 221,59 221,76" fill="#B0C3BA" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="168" y="100" width="77" height="30" rx="5" fill="#B5C1BE" stroke="#98AAA5" stroke-width="1.5"/>
+<rect x="164" y="112" width="85" height="21" rx="4" fill="#A6B6B1" stroke="none" stroke-width="1.5"/>
+<line x1="174" y1="132" x2="174" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<line x1="240" y1="132" x2="240" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<polygon points="81,132 141,132 155,144 66,144" fill="#C7A981" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<line x1="78" y1="144" x2="78" y2="159" stroke="#A98B65" stroke-width="3"/>
+<line x1="145" y1="144" x2="145" y2="159" stroke="#A98B65" stroke-width="3"/>
+<rect x="78" y="41" width="76" height="69" rx="3" fill="none" stroke="#167D8D" stroke-width="3"/>
+</g>
+<polyline points="405,253 606,253" fill="none" stroke="#829099" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="606,253 596.0,248.2 596.0,257.8" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="505" y="231" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#63727C">Move away</text>
+<polyline points="990,253 1190,253" fill="none" stroke="#829099" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1190,253 1180.0,248.2 1180.0,257.8" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="1090" y="231" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#63727C">Return to A</text>
+<rect x="54" y="352" width="16" height="16" rx="2" fill="#167D8D" stroke="none" stroke-width="1.5"/>
+<text x="82" y="366" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#63727C">Observed detail</text>
+<text x="800" y="366" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#63727C">Newly revealed content</text>
+<rect x="1220" y="352" width="16" height="16" rx="2" fill="#167D8D" stroke="none" stroke-width="1.5"/>
+<text x="1248" y="366" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#63727C">Same detail to preserve</text>
+<line x1="42" y1="390" x2="1558" y2="390" stroke="#B9C5CB" stroke-width="1.3"/>
+<text x="42" y="429" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#21323D">b</text>
+<text x="74" y="429" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600" text-anchor="start" fill="#21323D">A memory loop that protects observed evidence</text>
+<polyline points="268,679 309,679 309,592 336,592" fill="none" stroke="#167D8D" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="336,592 326.0,587.2 326.0,596.8" fill="#167D8D" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polyline points="705,592 755,592" fill="none" stroke="#167D8D" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="755,592 745.0,587.2 745.0,596.8" fill="#167D8D" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polyline points="1060,592 1120,592" fill="none" stroke="#167D8D" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1120,592 1110.0,587.2 1110.0,596.8" fill="#167D8D" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polyline points="1330,592 1370,592" fill="none" stroke="#829099" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1370,592 1360.0,587.2 1360.0,596.8" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polyline points="1534,601 1554,601 1554,940 1070,940" fill="none" stroke="#C68A34" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1070,940 1080.0,944.8 1080.0,935.2" fill="#C68A34" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polyline points="650,889 516,889 516,760" fill="none" stroke="#C68A34" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="516,760 511.2,770.0 520.8,770.0" fill="#C68A34" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polyline points="1425,642 1425,705 1265,705 1265,760" fill="none" stroke="#829099" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1265,760 1269.8,750.0 1260.2,750.0" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polyline points="1132,807 1101,807 1101,671 1165,671 1165,647" fill="none" stroke="#829099" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1165,647 1160.2,657.0 1169.8,657.0" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="159" y="491" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="500" text-anchor="middle" fill="#21323D">Initial image I0</text>
+<g transform="translate(50 510) scale(0.6606060606060606 0.6588235294117647)">
+<rect x="0" y="0" width="330" height="170" rx="4" fill="#F4F1EB" stroke="#B9C5CB" stroke-width="1.5"/>
+<polygon points="0,0 62,32 62,118 0,170" fill="#E8E3DC" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="62,118 270,118 330,170 0,170" fill="#E6D7C2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="270,32 330,0 330,170 270,118" fill="#EEE9E2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="62" y="32" width="208" height="86" rx="0" fill="#F7F4EE" stroke="none" stroke-width="1.5"/>
+<line x1="62" y1="32" x2="62" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="270" y1="32" x2="270" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="0" y1="170" x2="62" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<line x1="330" y1="170" x2="270" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<rect x="83" y="46" width="65" height="58" rx="0" fill="#C8DEE0" stroke="#A6BDBF" stroke-width="2"/>
+<line x1="115.5" y1="46" x2="115.5" y2="104" stroke="#F9FCFC" stroke-width="3"/>
+<line x1="83" y1="76" x2="148" y2="76" stroke="#F9FCFC" stroke-width="3"/>
+<rect x="184" y="51" width="43" height="31" rx="0" fill="#DED3C4" stroke="#AA9E90" stroke-width="2"/>
+<polygon points="190,76 201,60 210,70 221,59 221,76" fill="#B0C3BA" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="168" y="100" width="77" height="30" rx="5" fill="#B5C1BE" stroke="#98AAA5" stroke-width="1.5"/>
+<rect x="164" y="112" width="85" height="21" rx="4" fill="#A6B6B1" stroke="none" stroke-width="1.5"/>
+<line x1="174" y1="132" x2="174" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<line x1="240" y1="132" x2="240" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<polygon points="81,132 141,132 155,144 66,144" fill="#C7A981" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<line x1="78" y1="144" x2="78" y2="159" stroke="#A98B65" stroke-width="3"/>
+<line x1="145" y1="144" x2="145" y2="159" stroke="#A98B65" stroke-width="3"/>
+</g>
+<rect x="50" y="643" width="218" height="68" rx="8" fill="#F6F8F9" stroke="#B9C5CB" stroke-width="1.5"/>
+<text x="159" y="671" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#21323D">VAE + depth</text>
+<text x="159" y="698" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#21323D">Lift into 3D</text>
+<polyline points="159,623 159,640" fill="none" stroke="#829099" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="159,640 162.36,633.0 155.64,633.0" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="345" y="466" width="360" height="294" rx="12" fill="#F3F8F8" stroke="#B9C5CB" stroke-width="1.7"/>
+<circle cx="375" cy="499" r="17" fill="#21323D" stroke="none" stroke-width="1.5"/>
+<text x="375" y="506" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#FFFFFF">1</text>
+<text x="402" y="507" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="600" text-anchor="start" fill="#21323D">Protected latent memory</text>
+<line x1="380" y1="610" x2="530" y2="532" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="405" y1="623" x2="555" y2="545" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="430" y1="636" x2="580" y2="558" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="455" y1="649" x2="605" y2="571" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="480" y1="662" x2="630" y2="584" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="505" y1="675" x2="655" y2="597" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="530" y1="688" x2="680" y2="610" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="380" y1="610" x2="530" y2="688" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="405" y1="597" x2="555" y2="675" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="430" y1="584" x2="580" y2="662" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="455" y1="571" x2="605" y2="649" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="480" y1="558" x2="630" y2="636" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="505" y1="545" x2="655" y2="623" stroke="#CDDDDF" stroke-width="1.1"/>
+<line x1="530" y1="532" x2="680" y2="610" stroke="#CDDDDF" stroke-width="1.1"/>
+<polygon points="432,573 447.5,564.0 463.0,573 447.5,582.0" fill="#93C4CA" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="432,573 447.5,582.0 447.5,607.0 432,598" fill="#167D8D" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="447.5,582.0 463.0,573 463.0,598 447.5,607.0" fill="#126A77" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="464,588 479.5,579.0 495.0,588 479.5,597.0" fill="#93C4CA" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="464,588 479.5,597.0 479.5,622.0 464,613" fill="#167D8D" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="479.5,597.0 495.0,588 495.0,613 479.5,622.0" fill="#126A77" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="496,603 511.5,594.0 527.0,603 511.5,612.0" fill="#93C4CA" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="496,603 511.5,612.0 511.5,637.0 496,628" fill="#167D8D" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="511.5,612.0 527.0,603 527.0,628 511.5,637.0" fill="#126A77" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="528,618 543.5,609.0 559.0,618 543.5,627.0" fill="#93C4CA" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="528,618 543.5,627.0 543.5,652.0 528,643" fill="#167D8D" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="543.5,627.0 559.0,618 559.0,643 543.5,652.0" fill="#126A77" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="464,555 479.5,546.0 495.0,555 479.5,564.0" fill="#93C4CA" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="464,555 479.5,564.0 479.5,589.0 464,580" fill="#167D8D" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="479.5,564.0 495.0,555 495.0,580 479.5,589.0" fill="#126A77" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="496,570 511.5,561.0 527.0,570 511.5,579.0" fill="#93C4CA" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="496,570 511.5,579.0 511.5,604.0 496,595" fill="#167D8D" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="511.5,579.0 527.0,570 527.0,595 511.5,604.0" fill="#126A77" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="528,585 543.5,576.0 559.0,585 543.5,594.0" fill="#93C4CA" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="528,585 543.5,594.0 543.5,619.0 528,610" fill="#167D8D" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="543.5,594.0 559.0,585 559.0,610 543.5,619.0" fill="#126A77" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="560,600 575.5,591.0 591.0,600 575.5,609.0" fill="#EAC28A" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="560,600 575.5,609.0 575.5,634.0 560,625" fill="#C68A34" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="575.5,609.0 591.0,600 591.0,625 575.5,634.0" fill="#AA7028" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="528,552 543.5,543.0 559.0,552 543.5,561.0" fill="#EAC28A" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="528,552 543.5,561.0 543.5,586.0 528,577" fill="#C68A34" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="543.5,561.0 559.0,552 559.0,577 543.5,586.0" fill="#AA7028" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="560,567 575.5,558.0 591.0,567 575.5,576.0" fill="#EAC28A" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="560,567 575.5,576.0 575.5,601.0 560,592" fill="#C68A34" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="575.5,576.0 591.0,567 591.0,592 575.5,601.0" fill="#AA7028" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="592,582 607.5,573.0 623.0,582 607.5,591.0" fill="#EAC28A" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="592,582 607.5,591.0 607.5,616.0 592,607" fill="#C68A34" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="607.5,591.0 623.0,582 623.0,607 607.5,616.0" fill="#AA7028" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="594,548 609.5,539.0 625.0,548 609.5,557.0" fill="#EAC28A" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="594,548 609.5,557.0 609.5,582.0 594,573" fill="#C68A34" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<polygon points="609.5,557.0 625.0,548 625.0,573 609.5,582.0" fill="#AA7028" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round"/>
+<path d="M377.6 554.65 V548.9 C377.6 539.7,393.7 539.7,393.7 548.9 V554.65" fill="none" stroke="#167D8D" stroke-width="2.3"/>
+<rect x="373" y="553.5" width="25.299999999999997" height="19.549999999999997" rx="2.3" fill="#167D8D" stroke="none" stroke-width="1.5"/>
+<circle cx="385.65" cy="561.55" r="2.3" fill="#FFFFFF" stroke="none" stroke-width="1.5"/>
+<text x="525" y="711" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#21323D">One store, two source tags</text>
+<text x="525" y="742" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="500" text-anchor="middle" fill="#167D8D">Real anchors stay unchanged</text>
+<rect x="768" y="466" width="292" height="294" rx="12" fill="#F6F8F9" stroke="#B9C5CB" stroke-width="1.7"/>
+<circle cx="799" cy="499" r="17" fill="#21323D" stroke="none" stroke-width="1.5"/>
+<text x="799" y="506" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#FFFFFF">2</text>
+<text x="825" y="507" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="600" text-anchor="start" fill="#21323D">Layered readout</text>
+<text x="914" y="544" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#63727C">Projected candidates (K = 2)</text>
+<rect x="810" y="568" width="84" height="66" rx="2" fill="white" stroke="#B9C5CB" stroke-width="1.8"/>
+<line x1="831" y1="568" x2="831" y2="634" stroke="#D8E0E3" stroke-width="1"/>
+<line x1="852" y1="568" x2="852" y2="634" stroke="#D8E0E3" stroke-width="1"/>
+<line x1="873" y1="568" x2="873" y2="634" stroke="#D8E0E3" stroke-width="1"/>
+<line x1="810" y1="590" x2="894" y2="590" stroke="#D8E0E3" stroke-width="1"/>
+<line x1="810" y1="612" x2="894" y2="612" stroke="#D8E0E3" stroke-width="1"/>
+<rect x="832" y="569" width="19" height="20" rx="0" fill="#C68A34" stroke="none" stroke-width="1.5"/>
+<rect x="832" y="591" width="19" height="20" rx="0" fill="#C68A34" stroke="none" stroke-width="1.5"/>
+<rect x="853" y="591" width="19" height="20" rx="0" fill="#167D8D" stroke="none" stroke-width="1.5"/>
+<rect x="853" y="613" width="19" height="20" rx="0" fill="#C68A34" stroke="none" stroke-width="1.5"/>
+<rect x="923" y="568" width="84" height="66" rx="2" fill="white" stroke="#B9C5CB" stroke-width="1.8"/>
+<line x1="944" y1="568" x2="944" y2="634" stroke="#D8E0E3" stroke-width="1"/>
+<line x1="965" y1="568" x2="965" y2="634" stroke="#D8E0E3" stroke-width="1"/>
+<line x1="986" y1="568" x2="986" y2="634" stroke="#D8E0E3" stroke-width="1"/>
+<line x1="923" y1="590" x2="1007" y2="590" stroke="#D8E0E3" stroke-width="1"/>
+<line x1="923" y1="612" x2="1007" y2="612" stroke="#D8E0E3" stroke-width="1"/>
+<rect x="945" y="569" width="19" height="20" rx="0" fill="#167D8D" stroke="none" stroke-width="1.5"/>
+<rect x="945" y="591" width="19" height="20" rx="0" fill="#167D8D" stroke="none" stroke-width="1.5"/>
+<rect x="966" y="591" width="19" height="20" rx="0" fill="#C68A34" stroke="none" stroke-width="1.5"/>
+<rect x="966" y="613" width="19" height="20" rx="0" fill="#167D8D" stroke="none" stroke-width="1.5"/>
+<text x="852" y="660" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#63727C">Layer 1</text>
+<text x="965" y="660" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#63727C">Layer 2</text>
+<text x="914" y="690" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="500" text-anchor="middle" fill="#167D8D">Reserve a real candidate</text>
+<text x="914" y="715" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" text-anchor="middle" fill="#167D8D">when available</text>
+<text x="914" y="746" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#63727C">Features + metadata</text>
+<text x="914" y="452" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#63727C">Camera trajectory</text>
+<polyline points="914,456 914,466" fill="none" stroke="#829099" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="914,466 916.88,460.0 911.12,460.0" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="1230" y="486" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#63727C">Text + camera rays</text>
+<polyline points="1230,496 1230,521" fill="none" stroke="#829099" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1230,521 1233.84,513.0 1226.16,513.0" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="1124" y="525" width="206" height="122" rx="10" fill="#F6F8F9" stroke="#B9C5CB" stroke-width="1.7"/>
+<rect x="1124" y="525" width="206" height="36" rx="10" fill="#EAF0F2" stroke="none" stroke-width="1.5"/>
+<text x="1227" y="550" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#21323D">Memory adapter</text>
+<text x="1227" y="591" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="middle" fill="#21323D">Video DiT</text>
+<text x="1227" y="622" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" text-anchor="middle" fill="#21323D">Wan backbone</text>
+<text x="1462" y="491" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="500" text-anchor="middle" fill="#21323D">Generated chunk</text>
+<g transform="translate(1382 514) scale(0.509090909090909 0.5058823529411764)">
+<rect x="0" y="0" width="330" height="170" rx="4" fill="#F4F1EB" stroke="#B9C5CB" stroke-width="1.5"/>
+<polygon points="0,0 62,32 62,118 0,170" fill="#E8E3DC" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="62,118 270,118 330,170 0,170" fill="#E6D7C2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="270,32 330,0 330,170 270,118" fill="#EEE9E2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="62" y="32" width="208" height="86" rx="0" fill="#F7F4EE" stroke="none" stroke-width="1.5"/>
+<line x1="62" y1="32" x2="62" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="270" y1="32" x2="270" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="0" y1="170" x2="62" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<line x1="330" y1="170" x2="270" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<rect x="177" y="46" width="53" height="73" rx="0" fill="#D9C5A8" stroke="#BDA687" stroke-width="2"/>
+<circle cx="219" cy="87" r="2.5" fill="#8A7B68" stroke="none" stroke-width="1.5"/>
+<rect x="82" y="51" width="52" height="30" rx="0" fill="#DDD6CA" stroke="#AAA69B" stroke-width="2"/>
+<rect x="87" y="96" width="65" height="26" rx="3" fill="#C4B198" stroke="#A99478" stroke-width="1.5"/>
+<line x1="95" y1="122" x2="95" y2="138" stroke="#A99478" stroke-width="3"/>
+<line x1="145" y1="122" x2="145" y2="138" stroke="#A99478" stroke-width="3"/>
+<line x1="256" y1="72" x2="256" y2="129" stroke="#89958C" stroke-width="3"/>
+<polygon points="240,76 249,58 262,58 274,76" fill="#DFCFA8" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="246,130 267,130 272,135 241,135" fill="#89958C" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+</g>
+<g transform="translate(1374 535) scale(0.509090909090909 0.5058823529411764)">
+<rect x="0" y="0" width="330" height="170" rx="4" fill="#F4F1EB" stroke="#B9C5CB" stroke-width="1.5"/>
+<polygon points="0,0 62,32 62,118 0,170" fill="#E8E3DC" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="62,118 270,118 330,170 0,170" fill="#E6D7C2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="270,32 330,0 330,170 270,118" fill="#EEE9E2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="62" y="32" width="208" height="86" rx="0" fill="#F7F4EE" stroke="none" stroke-width="1.5"/>
+<line x1="62" y1="32" x2="62" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="270" y1="32" x2="270" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="0" y1="170" x2="62" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<line x1="330" y1="170" x2="270" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<rect x="83" y="46" width="65" height="58" rx="0" fill="#C8DEE0" stroke="#A6BDBF" stroke-width="2"/>
+<line x1="115.5" y1="46" x2="115.5" y2="104" stroke="#F9FCFC" stroke-width="3"/>
+<line x1="83" y1="76" x2="148" y2="76" stroke="#F9FCFC" stroke-width="3"/>
+<rect x="184" y="51" width="43" height="31" rx="0" fill="#DED3C4" stroke="#AA9E90" stroke-width="2"/>
+<polygon points="190,76 201,60 210,70 221,59 221,76" fill="#B0C3BA" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="168" y="100" width="77" height="30" rx="5" fill="#B5C1BE" stroke="#98AAA5" stroke-width="1.5"/>
+<rect x="164" y="112" width="85" height="21" rx="4" fill="#A6B6B1" stroke="none" stroke-width="1.5"/>
+<line x1="174" y1="132" x2="174" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<line x1="240" y1="132" x2="240" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<polygon points="81,132 141,132 155,144 66,144" fill="#C7A981" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<line x1="78" y1="144" x2="78" y2="159" stroke="#A98B65" stroke-width="3"/>
+<line x1="145" y1="144" x2="145" y2="159" stroke="#A98B65" stroke-width="3"/>
+</g>
+<g transform="translate(1366 556) scale(0.509090909090909 0.5058823529411764)">
+<rect x="0" y="0" width="330" height="170" rx="4" fill="#F4F1EB" stroke="#B9C5CB" stroke-width="1.5"/>
+<polygon points="0,0 62,32 62,118 0,170" fill="#E8E3DC" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="62,118 270,118 330,170 0,170" fill="#E6D7C2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="270,32 330,0 330,170 270,118" fill="#EEE9E2" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="62" y="32" width="208" height="86" rx="0" fill="#F7F4EE" stroke="none" stroke-width="1.5"/>
+<line x1="62" y1="32" x2="62" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="270" y1="32" x2="270" y2="118" stroke="#CAC6BF" stroke-width="1.2"/>
+<line x1="0" y1="170" x2="62" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<line x1="330" y1="170" x2="270" y2="118" stroke="#CABBAB" stroke-width="1.2"/>
+<rect x="83" y="46" width="65" height="58" rx="0" fill="#C8DEE0" stroke="#A6BDBF" stroke-width="2"/>
+<line x1="115.5" y1="46" x2="115.5" y2="104" stroke="#F9FCFC" stroke-width="3"/>
+<line x1="83" y1="76" x2="148" y2="76" stroke="#F9FCFC" stroke-width="3"/>
+<rect x="184" y="51" width="43" height="31" rx="0" fill="#DED3C4" stroke="#AA9E90" stroke-width="2"/>
+<polygon points="190,76 201,60 210,70 221,59 221,76" fill="#B0C3BA" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<rect x="168" y="100" width="77" height="30" rx="5" fill="#B5C1BE" stroke="#98AAA5" stroke-width="1.5"/>
+<rect x="164" y="112" width="85" height="21" rx="4" fill="#A6B6B1" stroke="none" stroke-width="1.5"/>
+<line x1="174" y1="132" x2="174" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<line x1="240" y1="132" x2="240" y2="143" stroke="#8B8C83" stroke-width="3"/>
+<polygon points="81,132 141,132 155,144 66,144" fill="#C7A981" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<line x1="78" y1="144" x2="78" y2="159" stroke="#A98B65" stroke-width="3"/>
+<line x1="145" y1="144" x2="145" y2="159" stroke="#A98B65" stroke-width="3"/>
+</g>
+<rect x="650" y="799" width="420" height="190" rx="12" fill="#FFFBF4" stroke="#B9C5CB" stroke-width="1.7"/>
+<circle cx="682" cy="831" r="17" fill="#21323D" stroke="none" stroke-width="1.5"/>
+<text x="682" y="838" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" text-anchor="middle" fill="#FFFFFF">3</text>
+<text x="709" y="839" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="600" text-anchor="start" fill="#21323D">Guard generated writes</text>
+<text x="676" y="874" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#63727C">Estimate depth + lift generated latents</text>
+<line x1="681" y1="911" x2="1012" y2="911" stroke="#B9C5CB" stroke-width="1.5"/>
+<rect x="678" y="901" width="12" height="20" rx="1" fill="#829099" stroke="none" stroke-width="1.5"/>
+<polygon points="690,906 700,901 700,921 690,916" fill="#829099" stroke="none" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="679" y="947" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" text-anchor="start" fill="#63727C">I0</text>
+<line x1="935" y1="887" x2="935" y2="932" stroke="#167D8D" stroke-width="5"/>
+<text x="948" y="902" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="start" fill="#167D8D">Real</text>
+<text x="948" y="927" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="start" fill="#167D8D">surface</text>
+<circle cx="816" cy="911" r="8" fill="#C68A34" stroke="none" stroke-width="1.5"/>
+<line x1="805" y1="900" x2="827" y2="922" stroke="#BA5952" stroke-width="3"/>
+<line x1="805" y1="922" x2="827" y2="900" stroke="#BA5952" stroke-width="3"/>
+<text x="816" y="949" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#BA5952">Reject front occlusion</text>
+<text x="860" y="977" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="500" text-anchor="middle" fill="#C68A34">Fuse / add eligible generated slots</text>
+<text x="1277" y="968" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#C68A34">Generated write-back</text>
+<text x="1307" y="928" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#C68A34">RGB + latents</text>
+<rect x="1132" y="760" width="216" height="104" rx="8" fill="#F6F8F9" stroke="#B9C5CB" stroke-width="1.5"/>
+<text x="1240" y="792" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#21323D">Latent inversion</text>
+<text x="1240" y="824" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" text-anchor="middle" fill="#21323D">Next-chunk prefix</text>
+<text x="1240" y="888" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#63727C">Boundary handoff</text>
+<line x1="42" y1="1010" x2="1558" y2="1010" stroke="#B9C5CB" stroke-width="1.2"/>
+<rect x="49" y="1028" width="17" height="17" rx="2" fill="#167D8D" stroke="none" stroke-width="1.5"/>
+<text x="78" y="1043" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#63727C">Observed anchor</text>
+<rect x="318" y="1028" width="17" height="17" rx="2" fill="#C68A34" stroke="none" stroke-width="1.5"/>
+<text x="348" y="1043" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#63727C">Generated memory</text>
+<line x1="606" y1="1030" x2="620" y2="1044" stroke="#BA5952" stroke-width="3"/>
+<line x1="606" y1="1044" x2="620" y2="1030" stroke="#BA5952" stroke-width="3"/>
+<text x="633" y="1043" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#63727C">Rejected write</text>
+<line x1="870" y1="1037" x2="904" y2="1037" stroke="#829099" stroke-width="2.3"/>
+<text x="918" y="1043" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start" fill="#63727C">Temporal handoff</text>
+<text x="1557" y="1043" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="end" fill="#63727C">Mechanism sketch; no performance claims.</text>
+</svg>
